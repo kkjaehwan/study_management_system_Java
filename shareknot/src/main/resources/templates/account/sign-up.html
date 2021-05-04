@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment.html::head">
+</head>
+<body class="bg-light">
+	<div th:replace="fragment.html::main-navi"></div>
+	<!-- Sign-up form part Start -->
+	<div class="container">
+		<div class="py-5 text-center">
+			<h2>Sign-Up</h2>
+		</div>
+		<div class="row justify-content-center">
+			<form class="needs-validation col-sm-6" action="#" th:action="@{/sign-up}" th:object="${signUpForm}" method="post" novalidate>
+				<div class="form-group">
+					<label for="nickname">nickname</label>
+					<input id="nickname" type="text" th:field="*{nickname}" class="form-control" placeholder="nickname" aria-describedby="nicknameHelp" required minlength="3" maxlength="20">
+					<small id="nicknameHelp" class="form-text text-muted"> Please enter at least 3 characters and at least 20 characters in numbers without spaces. You can change it after signing up. </small>
+					<small class="invalid-feedback">Please enter a nickname.</small>
+					<small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">Nickname Error</small>
+				</div>
+
+				<div class="form-group">
+					<label for="email">email</label>
+					<input id="email" type="email" th:field="*{email}" class="form-control" placeholder="your@email.com" aria-describedby="emailHelp" required>
+					<small id="emailHelp" class="form-text text-muted">We do not disclose email from users of ShareKnot. </small>
+					<small class="invalid-feedback">Please enter an email.</small>
+					<small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</small>
+				</div>
+
+				<div class="form-group">
+					<label for="password">Password</label>
+					<input id="password" type="password" th:field="*{password}" class="form-control" placeholder="*******" aria-describedby="passwordHelp" required minlength="8" maxlength="50">
+					<small id="passwordHelp" class="form-text text-muted"> Please enter not less than 8 but not more than 50 characters. You can use alphabetic characters, numbers, and special symbols, and spaces are not allowed. </small>
+					<small class="invalid-feedback">Please enter your password.</small>
+					<small class="form-text text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</small>
+				</div>
+
+				<div class="d-grid gap-2">
+					<button class="btn btn-success btn-block" type="submit">Sign up</button>
+				</div>
+				<small id="submitHelp" class="form-text text-muted">
+					If you agree to the
+					<a href="#">terms and conditions</a>
+					, click the Subscribe button.
+				</small>
+			</form>
+		</div>
+		<div th:replace="fragment.html::footer"></div>
+	</div>
+	<!-- Sign-up form part End -->
+	<script th:replace="fragment.html::form-validation"></script>
+</body>
+</html>

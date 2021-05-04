@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment.html::head">
+<body class="bg-light">
+	<div th:replace="fragment.html::main-navi"></div>
+
+	<!-- body Start -->
+	<div class="py-5 text-center" th:if="${error}">
+		<p class="lead">Confirm ShareKnot's email</p>
+		<div class="alert alert-danger" role="alert">Email Confirm Link is not correct.</div>
+	</div>
+	<div class="py-5 text-center" th:if="${error == null}">
+		<p class="lead">Confirm ShareKnot's email</p>
+		<h2>
+			Email verification is completed. Your member number is <span th:text="${numberOfUser}">10</span><br> Welcome to ShareKnot, <span th:text="${nickname}">TSJAY</span>  
+		</h2>
+		<small class="text-info">Now, you can log-in using your email and password which you filled in when you sign up ShareKnot</small>
+	</div>
+
+
+	<div th:replace="fragment.html::footer"></div>
+	<!-- body End-->
+</body>
+</html>

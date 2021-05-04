@@ -1,0 +1,14 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment.html::head">
+</head>
+<body class="bg-light">
+	<div th:replace="fragment.html::main-navi"></div>
+	<div th:replace="fragment.html::party-banner"></div>
+	<div class="container">
+		<div th:replace="fragment.html::event-form (mode='new', action='/party/' + ${party.path} + '/new-event/')"></div>
+	</div>
+	<div th:replace="fragment.html::footer"></div>
+	<script th:replace="fragment.html::form-validation"></script>
+	<script th:replace="fragment.html::editor-script"></script>
+</body>
+</html>

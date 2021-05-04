@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragment.html::head">
+</head>
+<body class="bg-light">
+	<div th:replace="fragment.html::main-navi"></div>
+	<!-- Start -->
+	<div class="container">
+		<div class="row mt-5 justify-content-center">
+			<div class="col-10">
+				<div th:if="${message}" class="alert alert-info alert-dismissible fade show mt-3" role="alert">
+					<span th:text="${message}">success</span>
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">x</span>
+					</button>
+				</div>
+				<div class="row">
+					<h2 class="col-sm-12">Change Notifications</h2>
+				</div>
+
+				<div class="row mt-3">
+					<div class="col-sm-2">
+						<div th:replace="fragment.html::settings-menu(currentMenu='notifications')"></div>
+					</div>
+					<form class="col-5" action="#" th:action="@{/settings/notifications}" th:object="${notifications}" method="post" novalidate>
+                        <div class="alert alert-light" role="alert">
+                            Set up how you will be notified when a subject of interest is created in a <a href="#" th:href="@{/settings/keywords}">Tag of interest</a> your <a href="#" th:href="@{/settings/locations}">Zone</a>.
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{partyCreatedByEmail}" class="custom-control-input" id="partyCreatedByEmail">
+                                <label class="custom-control-label" for="partyCreatedByEmail">Receive by email</label>
+                            </div>
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{partyCreatedByWeb}" class="custom-control-input" id="partyCreatedByWeb">
+                                <label class="custom-control-label" for="partyCreatedByWeb">Receive by Web</label>
+                            </div>
+                        </div>
+                        <div class="alert alert-light" role="alert">
+                            Set how you want to be notified of the results of your subscription of group.
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{partyEnrolmentResultByEmail}" class="custom-control-input" id="partyEnrolmentResultByEmil">
+                                <label class="custom-control-label" for="partyEnrolmentResultByEmil">Receive by email</label>
+                            </div>
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{partyEnrolmentResultByWeb}" class="custom-control-input" id="partyEnrolmentResultByWeb">
+                                <label class="custom-control-label" for="partyEnrolmentResultByWeb">Receive by Web</label>
+                            </div>
+                        </div>
+                        <div class="alert alert-light" role="alert">
+                            Set how you want to be notified about the group you are participating in.
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{partyUpdatedByEmail}" class="custom-control-input" id="partyWatchByEmail">
+                                <label class="custom-control-label" for="partyWatchByEmail">Receive by email</label>
+                            </div>
+                            <div class="custom-control custom-switch custom-control-inline">
+                                <input type="checkbox" th:field="*{partyUpdatedByWeb}" class="custom-control-input" id="partyWatchByWeb">
+                                <label class="custom-control-label" for="partyWatchByWeb">Receive by Web</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+							<button class="btn btn-primary btn-block" type="submit" aria-describedby="submitHelp">Modify</button>
+                        </div>
+                    </form>
+
+				</div>
+			</div>
+		</div>
+		<div th:replace="fragment.html::footer"></div>
+	</div>
+	<!-- End -->
+	<script th:replace="fragment.html::form-validation"></script>
+</body>
+
+</html>

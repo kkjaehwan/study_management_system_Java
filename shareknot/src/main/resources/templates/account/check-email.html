@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment.html::head">
+<body class="bg-light">
+	<div th:replace="fragment.html::main-navi"></div>
+
+	<!-- body Start -->
+
+	<div class="py-5 text-center" th:if="${error}">
+		<p class="lead">Confirm ShareKnot's email</p>
+		<div class="alert alert-danger" role="alert" th:text="${error}"></div>
+		<p class="lead" th:text="${email}">your email</p>
+		<p class="lead">The time the email was sent is <span th:text="${#temporals.format(emailCheckTokenGenerateAt, 'yyyy/MM/dd HH:mm')}"></span></p>
+	</div>
+	<div class="py-5 text-center" th:if="${error == null}">
+		<p class="lead">Confirm ShareKnot's email</p>
+		<h2>
+			Check your email again.
+		</h2>
+		<a class="btn btn-outline-info" th:href="@{/resend-confirm-email}">Resent confirmation email</a>
+	</div>
+
+
+	<div th:replace="fragment.html::footer"></div>
+	<!-- body End-->
+</body>
+</html>

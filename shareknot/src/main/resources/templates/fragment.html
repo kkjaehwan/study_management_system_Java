@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- Head Start -->
+<head th:fragment="head">
+<meta charset="UTF-8">
+
+<title>ShareKnot</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/node_modules/@yaireo/tagify/dist/tagify.css" />
+<link rel="stylesheet" href="/node_modules/summernote/dist/summernote-bs4.min.css" />
+<script src="/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<!-- script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script> -->
+<script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
+<style>
+.container {
+	max-width: 100%;
+}
+
+.tagify-outside {
+	border: 0;
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR",
+		"Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+		"Noto Color Emoji";
+}
+
+body, input, button, select, optgroup, textarea, .tooltip, .popover {
+	font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR",
+		"Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+		"Noto Color Emoji";
+}
+
+table th {
+	font-weight: lighter;
+}
+/* .navbar-nav .nav-item {
+	text-align:right;
+}
+.navbar-nav .nav-item .dropdown-item, .navbar-nav .nav-item .dropdown-header{
+	text-align:right;
+} */
+</style>
+</head>
+<!-- Head Start -->
+<!-- Navigation Bar Start -->
+<nav th:fragment="main-navi" class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<a class="navbar-brand" href="/" th:href="@{/}"> <img src="/images/logo_long.png">
+	</a>
+	<ul class="navbar-nav mr-auto">
+	</ul>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
+		<ul class="navbar-nav  ml-auto">
+			<li class="nav-item">
+				<form th:action="@{/search/party}" class="form-inline" method="get">
+					<input class="form-control mr-sm-2" name="keyword" type="search" placeholder="Search Party" aria-label="Search" />
+				</form>
+			</li>
+			<li class="nav-item"><a class="nav-link" th:href="@{/ownner-profile}">See Developer Profile</a></li>
+			<li class="nav-item" sec:authorize="!isAuthenticated()"><a class="nav-link" th:href="@{/login}">Log-in</a></li>
+			<li class="nav-item" sec:authorize="!isAuthenticated()"><a class="nav-link" th:href="@{/sign-up}">Sign-up</a></li>
+			<li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link btn-outline-primary" th:href="@{/new-party}"> <i class="fa fa-plus-square-o" aria-hidden="true"></i> Create Party
+			</a></li>
+			<li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" th:href="@{/notifications}"> <i th:if="${!hasNotification}" class="fa fa-bell-o" aria-hidden="true"></i> <span class="text-info" th:if="${hasNotification}"><i class="fa fa-bell" aria-hidden="true"></i></span>
+			</a></li>
+			<li class="nav-item dropdown" sec:authorize="isAuthenticated()"><a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <svg th:if="${#strings.isEmpty(account?.profileImage)}" th:data-jdenticon-value="${#authentication.name}" width="24" height="24" class="rounded border bg-light"></svg> <img th:if="${!#strings.isEmpty(account?.profileImage)}" th:src="${account.profileImage}" width="24" height="24" class="rounded border" />
+			</a>
+				<div class="dropdown-menu dropdown-menu-sm-right" aria-labelledby="userDropdown">
+					<h6 class="dropdown-header">
+						<span sec:authentication="name">Username</span>
+					</h6>
+					<a class="dropdown-item" th:href="@{'/profile/' + ${#authentication.name}}">profile</a> <a class="dropdown-item">groups</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="#" th:href="@{'/settings/profile'}">configuration</a>
+					<form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">
+						<button class="dropdown-item" type="submit">logout</button>
+					</form>
+				</div></li>
+		</ul>
+	</div>
+</nav>
+<!-- Navigation Bar End -->
+<!-- Footer Start-->
+<footer th:fragment="footer">
+	<div class="row justify-content-center">
+		<small class="d-block mb-3 text-muted">ShareKnot @ 2021</small>
+	</div>
+</footer>
+<!-- Footer End-->
+
+<!-- Massage Box Start-->
+<div th:fragment="messageBox" th:if="${message}" class="alert alert-info alert-dismissible text-center mt-3" role="alert">
+	<span th:text="${message}">success</span>
+	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		<span aria-hidden="true">x</span>
+	</button>
+</div>
+<!-- Massage Box End-->
+
+
+<!-- party-banner Start-->
+<div th:fragment="party-banner" th:if="${party.useBanner}" class="row" id="party-logo">
+	<img style="width: 100%" th:src="${party.image}" />
+</div>
+<!-- party-banner End-->
+
+
+<div th:fragment="event-form (mode, action)">
+	<div class="py-5 text-center">
+		<h2>
+			<a th:href="@{'/party/' + ${party.path}}"> <span th:text="${party.title}">Party</span>
+			</a> / <span th:if="${mode == 'edit'}" th:text="${event.title}"></span> <span th:if="${mode == 'new'}">Create new meeting</span>
+		</h2>
+	</div>
+	<div class="row justify-content-center">
+		<form class="needs-validation col-sm-10" th:action="@{${action}}" th:object="${eventForm}" method="post" novalidate>
+			<div class="form-group">
+				<label for="title">Name of meeting</label> <input id="title" type="text" th:field="*{title}" class="form-control" placeholder="Name of meeting" aria-describedby="titleHelp" required> <small id="titleHelp" class="form-text text-muted"> Please enter a meeting name of no more than 50 characters. </small> <small class="invalid-feedback">Please enter a meeting name.</small> <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Error</small>
+			</div>
+			<div class="form-group" th:if="${mode == 'new'}">
+				<label for="eventType">Recruitment method</label> <select th:field="*{eventType}" class="custom-select mr-sm-2" id="eventType" aria-describedby="eventTypeHelp">
+					<option th:value="FCFS">First come, first served.</option>
+					<option th:value="CONFIRMATIVE">Confirmed by Manager</option>
+				</select> <small id="eventTypeHelp" class="form-text text-muted"> There are two ways to recruit.When recruiting <br /> <strong> first come first served</strong>, the application within the limit number of applicants will be automatically confirmed, and if a cancellation occurs during the subsequent confirmed application, the applicant will be changed on a first served basis. However, even if you cancel after the registration deadline, the confirmation will not change.If you are recruiting with <br /> <strong>Confirm</strong>, the meeting and party manager can look up the meeting application list and decide whether to confirm it or not. Changes cannot be made after the registration deadline.
+				</small>
+			</div>
+			<div class="form-row">
+				<div class="form-group col-md-3">
+					<label for="limitOfEnrolments">the number of applicants</label> <input id="limitOfEnrolments" type="number" th:field="*{limitOfEnrolments}" class="form-control" placeholder="0" aria-describedby="limitOfEnrolmentsHelp"> <small id="limitOfEnrolmentsHelp" class="form-text text-muted"> Please set the maximum number of attendees for the meeting. It must be a meeting of at least two people.</small> <small class="invalid-feedback">Please enter the meeting application deadline and date.</small> <small class="form-text text-danger" th:if="${#fields.hasErrors('limitOfEnrolments')}" th:errors="*{limitOfEnrolments}">Error</small>
+				</div>
+				<div class="form-group col-md-3">
+					<label for="endEnrolmentDateTime">Registration Deadline Date</label> <input id="endEnrolmentDateTime" type="datetime-local" th:field="*{endEnrolmentDateTime}" class="form-control" aria-describedby="endEnrolmentDateTimeHelp" required> <small id="endEnrolmentDateTimeHelp" class="form-text text-muted"> You can only sign up for a meeting before the registration deadline.</small> <small class="invalid-feedback">Please enter the meeting application deadline and date.</small> <small class="form-text text-danger" th:if="${#fields.hasErrors('endEnrolmentDateTime')}" th:errors="*{endEnrolmentDateTime}">Error</small>
+				</div>
+				<div class="form-group col-md-3">
+					<label for="startDateTime">Meeting Start Date</label> <input id="startDateTime" type="datetime-local" th:field="*{startDateTime}" class="form-control" aria-describedby="startDateTimeHelp" required> <small id="startDateTimeHelp" class="form-text text-muted"> Please enter a date and time for the meeting to start. Please write down the detailed meeting schedule in the text. </small> <small class="invalid-feedback">Please enter a date and time for the meeting to start.</small> <small class="form-text text-danger" th:if="${#fields.hasErrors('startDateTime')}" th:errors="*{startDateTime}">Error</small>
+				</div>
+				<div class="form-group col-md-3">
+					<label for="startDateTime">Meeting End Date</label> <input id="endDateTime" type="datetime-local" th:field="*{endDateTime}" class="form-control" aria-describedby="endDateTimeHelp" required> <small id="endDateTimeHelp" class="form-text text-muted"> The meeting automatically changes to the end state after the end of the meeting date and time. </small> <small class="invalid-feedback">Please enter a date and time for the end of the meeting.</small> <small class="form-text text-danger" th:if="${#fields.hasErrors('endDateTime')}" th:errors="*{endDateTime}">Error</small>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="description">Meeting Description</label>
+				<textarea id="description" type="textarea" th:field="*{description}" class="editor form-control" placeholder="Please explain the meeting in detail." aria-describedby="descriptionHelp" required></textarea>
+				<small id="descriptionHelp" class="form-text text-muted"> Please write down the topics, locations, and how the meeting will proceed in detail. </small> <small class="invalid-feedback">Please enter a meeting description.</small> <small class="form-text text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Error</small>
+			</div>
+			<div class="form-group">
+				<button class="btn btn-primary btn-block" type="submit" aria-describedby="submitHelp" th:text="${mode == 'edit' ? 'Modify meeting' : 'Create meeting'}">Modify Meeting</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div th:fragment="party-list (partyList)" class="col-sm-12">
+	<div class="row">
+		<div class="col-md-4" th:each="party: ${partyList}">
+			<div class="card mb-4 shadow-sm">
+				<svg th:if="${#strings.isEmpty(party.image)}" th:data-jdenticon-value="${party.title}" class="card-img-top" height="45" th:alt="${party.title}"></svg>
+				<img th:if="${!#strings.isEmpty(party.image)}" th:src="${member?.profileImage}" height="45" class="card-img-top" th:alt="${party.title}" />
+				<div class="card-body">
+					<a th:href="@{'/party/' + ${party.path}}" class="text-decoration-none">
+						<h5 class="card-title context" th:text="${party.title}"></h5>
+					</a>
+					<p class="card-text" th:text="${party.shortDescription}">Short description</p>
+					<p class="card-text context">
+						<span th:each="tag: ${party.tags}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3"> <a th:href="@{'/search/tag/' + ${tag.title}}" class="text-decoration-none text-white"> <i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
+						</a>
+						</span> <span th:each="zone: ${party.zones}" class="font-weight-light text-monospace badge badge-primary mr-3"> <a th:href="@{'/search/zone/' + ${zone.id}}" class="text-decoration-none text-white"> <i class="fa fa-globe"></i> <span th:text="${zone.localNameOfCity}" class="text-white">City</span>
+						</a>
+						</span>
+					</p>
+					<div class="d-flex justify-content-between align-items-center">
+						<small class="text-muted"> <i class="fa fa-user-circle"></i> <span th:text="${party.memberCount}"></span>명
+						</small> <small class="text-muted date" th:text="${party.publishedDateTime}">9 mins</small>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<ul th:fragment="notification-list (notifications)" class="list-group list-group-flush">
+	<a href="#" th:href="@{${noti.link}}" th:each="noti: ${notifications}" class="list-group-item list-group-item-action">
+		<div class="d-flex w-100 justify-content-between">
+			<small class="text-muted" th:text="${noti.title}">Noti title</small> <small class="fromNow text-muted" th:text="${noti.createdDateTime}">3 days ago</small>
+		</div>
+		<p th:text="${noti.message}" class="text-left mb-0 mt-1">message</p>
+	</a>
+</ul>
+<!-- form-validation Start-->
+<script th:fragment="form-validation" type="application/javascript">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+    (function () {
+        'use strict';
+
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+
+            // Loop over them and prevent submission
+            Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        }, false)
+    }())
+
+
+
+
+
+
+
+
+
+</script>
+<!-- form-validation End-->
+<!-- editor-script start-->
+<div th:fragment="editor-script">
+	<script src="/node_modules/summernote/dist/summernote-bs4.min.js"></script>
+	<script type="application/javascript">
+		
+		
+		
+		
+		
+        $(function () {
+            $('.editor').summernote({
+                fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
+                placeholder: 'Please write about the party in detail',
+                tabsize: 2,
+                height: 300
+            });
+        });
+	
+	
+	
+	
+	
+	</script>
+</div>
+<!-- editor-script End-->
+
+<!-- party-info Start-->
+<div th:fragment="party-info">
+	<div class="row pt-4 text-left justify-content-center bg-light">
+		<div class="col-6">
+			<a href="#" class="text-decoration-none" th:href="@{'/party/' + ${party.path}}"> <span class="h2" th:text="${party.title}">Name of party</span>
+			</a>
+		</div>
+		<div class="col-4 text-right justify-content-end">
+			<span th:if="${party.published}" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Party Search Exposure Open">
+				<button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>Searching</button>
+			</span> <span th:if="${party.closed}" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Party Search Exposure Closed">
+				<button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>CLOSED</button>
+			</span> <span th:if="${!party.recruiting}" class="d-inline-block ml-1" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Not recruiting party members">
+				<button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>OFF</button>
+			</span> <span th:if="${party.recruiting}" class="d-inline-block ml-1" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="recruiting party members">
+				<button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>Recruiting</button>
+			</span> <span sec:authorize="isAuthenticated()" th:if="${party.isJoinable(#authentication.principal)}" class="btn-group" role="group" aria-label="Basic example">
+				<form action="#" th:action="@{'/party/' + ${party.path} + '/join'}" method="post">
+					<button class="btn btn-primary" type="submit">Join Party</button>
+				</form> <a class="btn btn-outline-primary" th:href="@{'/party/' + ${party.path} + '/members'}" th:text="${party.members.size()}">1</a>
+			</span> <span sec:authorize="isAuthenticated()" th:if="${party.isMember(#authentication.principal)}" class="btn-group" role="group">
+				<form action="#" th:action="@{'/party/' + ${party.path} + '/leave'}" method="post">
+					<button class="btn btn-outline-warning" type="submit">Leave Party</button>
+				</form> <a class="btn btn-outline-primary" th:href="@{'/party/' + ${party.path} + '/members'}" th:text="${party.members.size()}">1</a>
+			</span> <span sec:authorize="isAuthenticated()" th:if="${party.isManager(#authentication.principal)}"> <a class="btn btn-outline-primary" th:href="@{'/party/' + ${party.path} + '/new-event'}"> <i class="fa fa-plus"></i> Create Meeting
+			</a>
+			</span>
+		</div>
+	</div>
+	<div class="row justify-content-center bg-light">
+		<div class="col-10">
+			<p class="lead" th:text="${party.shortDescription}"></p>
+		</div>
+	</div>
+	<div class="row justify-content-center bg-light">
+		<div class="col-10">
+			<p>
+				<span th:each="tag: ${party.tags}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3"> <a th:href="@{'/search/tag/' + ${tag.title}}" class="text-decoration-none text-white"> <i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
+				</a>
+				</span> <span th:each="zone: ${party.zones}" class="font-weight-light text-monospace badge badge-primary mr-3"> <a th:href="@{'/search/zone/' + ${zone.id}}" class="text-decoration-none text-white"> <i class="fa fa-globe"></i> <span th:text="${zone.localNameOfCity}">City</span>
+				</a>
+				</span>
+			</p>
+		</div>
+	</div>
+</div>
+<!-- party-info End-->
+<!-- party-menu Start-->
+<div th:fragment="party-menu (partyMenu)" class="row px-3 justify-content-center bg-light">
+	<nav class="col-10 nav nav-tabs">
+		<a class="nav-item nav-link" href="#" th:classappend="${partyMenu == 'info'}? active" th:href="@{'/party/' + ${party.path}}"> <i class="fa fa-info-circle"></i> introduction
+		</a> <a class="nav-item nav-link" href="#" th:classappend="${partyMenu == 'members'}? active" th:href="@{'/party/' + ${party.path} + '/members'}"> <i class="fa fa-user"></i> Members
+		</a> <a class="nav-item nav-link" th:classappend="${partyMenu == 'events'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/events'}"> <i class="fa fa-calendar"></i> Meeting
+		</a> <a sec:authorize="isAuthenticated()" th:if="${party.isManager(#authentication.principal)}" class="nav-item nav-link" th:classappend="${partyMenu == 'settings'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/settings/description'}"> <i class="fa fa-cog"></i> Settings
+		</a>
+	</nav>
+</div>
+<!-- party-menu end-->
+<!-- member-list Start-->
+<div th:fragment="member-list (members, isManager)" class="row px-3 justify-content-center">
+	<ul class="list-unstyled col-10">
+		<li class="media mt-3" th:each="member: ${members}"><svg th:if="${#strings.isEmpty(member?.profileImage)}" th:data-jdenticon-value="${member.nickname}" width="64" height="64" class="rounded border bg-light mr-3"></svg> <img th:if="${!#strings.isEmpty(member?.profileImage)}" th:src="${member?.profileImage}" width="64" height="64" class="rounded border mr-3" />
+			<div class="media-body">
+				<h5 class="mt-0 mb-1">
+					<span th:text="${member.nickname}"></span> <span th:if="${isManager}" class="badge badge-primary">Manager</span>
+				</h5>
+				<span th:text="${member.bio}"></span>
+			</div></li>
+	</ul>
+</div>
+<!-- member-list end-->
+<!-- ajax-csrf-header Start-->
+<script th:fragment="ajax-csrf-header" type="application/javascript" th:inline="javascript">
+	
+	
+	
+	
+	
+	$(function() {
+        var csrfToken = /*[[${_csrf.token}]]*/ null;
+        var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+        $(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader(csrfHeader, csrfToken);
+        });
+    });
+
+
+
+
+
+</script>
+<!-- ajax-csrf-header end-->
+<!-- update-tags start -->
+<div th:fragment="update-tags (baseUrl)">
+	<script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
+	<script type="application/javascript">
+		
+		
+		
+		
+		
+	    $(function() {
+	        function tagRequest(url, tagTitle) {
+	            $.ajax({
+	                dataType: "json",
+	                autocomplete: {
+	                    enabled: true,
+	                    rightKey: true,
+	                },
+	                contentType: "application/json; charset=utf-8",
+	                method: "POST",
+	                url: "[(${baseUrl})]"  + url,
+	                data: JSON.stringify({'tagTitle': tagTitle})
+	            }).done(function (data, status) {
+	                console.log("${data} and status is ${status}");
+	            });
+	        }
+	
+	        function onAdd(e) {
+	            tagRequest("/add", e.detail.data.value);
+	        }
+	
+	        function onRemove(e) {
+	            tagRequest("/remove", e.detail.data.value);
+	        }
+	
+	        var tagInput = document.querySelector("#tags");
+	        
+	        var tagify = new Tagify(tagInput, {
+	            pattern: /^.{0,20}$/,
+	            whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
+	            dropdown : {
+	                enabled: 1, // suggest tags after a single character input
+	            } // map tags
+	        });
+	        
+	        tagify.on("add", onAdd);
+	        tagify.on("remove", onRemove);
+	        
+	        // add a class to Tagify's input element
+	        tagify.DOM.input.classList.add('form-control');
+	        // re-place Tagify's input element outside of the  element (tagify.DOM.scope), just before it
+	        tagify.DOM.scope.parentNode.insertBefore(tagify.DOM.input, tagify.DOM.scope);
+	    });
+		
+	
+	
+	
+	
+	</script>
+</div>
+<!-- update-tags end-->
+
+<!-- update-zones start -->
+<div th:fragment="update-zones (baseUrl)">
+	<script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
+	<script type="application/javascript">
+		
+		
+		
+    $(function() {
+        function zoneRequest(url, zoneName) {
+            $.ajax({
+                dataType: "json",
+                autocomplete: {
+                    enabled: true,
+                    rightKey: true,
+                },
+                contentType: "application/json; charset=utf-8",
+                method: "POST",
+                url: "[(${baseUrl})]" + url,
+                data: JSON.stringify({'zoneName': zoneName})
+            }).done(function (data, status) {
+                console.log("${data} and status is ${status}");
+            });
+        }
+
+        function onAdd(e) {
+            zoneRequest("/add", e.detail.data.value);
+        }
+
+        function onRemove(e) {
+            zoneRequest("/remove", e.detail.data.value);
+        }
+
+        var zoneInput = document.querySelector("#zones");
+        
+        var tagify = new Tagify(zoneInput, {
+            pattern: /^.{0,100}$/,
+            whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
+            dropdown : {
+                enabled: 1, // suggest zones after a single character input
+            } // map zones
+        });
+
+        tagify.on("add", onAdd);
+        tagify.on("remove", onRemove);
+        
+        // add a class to Tagify's input element
+        tagify.DOM.input.classList.add('form-control');
+        // re-place Tagify's input element outside of the  element (tagify.DOM.scope), just before it
+        tagify.DOM.scope.parentNode.insertBefore(tagify.DOM.input, tagify.DOM.scope);
+    });
+	
+	
+	
+	</script>
+</div>
+<!-- update-zones end -->
+<!-- tooltip Start-->
+<script th:fragment="tooltip" type="application/javascript">
+	
+	
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+
+</script>
+<!-- tooltip End-->
+<!-- party-settings-menu (currentMenu) Start-->
+<div th:fragment="party-settings-menu (currentMenu)" class="list-group">
+	<a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'description'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/settings/description'}">Introduction</a> <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'banner'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/settings/banner'}">Banner Image</a> <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/settings/tags'}">Party tags</a> <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/settings/zones'}">Activity Zones</a> <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'party'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/settings/party'}">Party</a>
+</div>
+<!-- party-settings-menu (currentMenu) End-->
+
+<!-- settings-menu (currentMenu) Start-->
+<div th:fragment="settings-menu (currentMenu)" class="list-group">
+	<a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" href="#" th:href="@{/settings/profile}">Profile</a> <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active" href="#" th:href="@{/settings/password}">Password</a> <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notifications'}? active" href="#" th:href="@{/settings/notifications}">Notification</a> <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'}? active" href="#" th:href="@{/settings/tags}">Tags of interest</a> <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'}? active" href="#" th:href="@{/settings/zones}">Zone</a> <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'account'}? active" href="#" th:href="@{/settings/account}">Account</a>
+</div>
+<!-- settings-menu (currentMenu) End-->
+
+<div th:fragment="date-time">
+	<script src="/node_modules/moment/min/moment-with-locales.min.js"></script>
+	<script type="application/javascript">
+		
+		
+		
+		
+		
+        $(function () {
+            //moment.locale('ko');
+            $(".date-time").text(function(index, dateTime) {
+                return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('LLL');
+            });
+            $(".date").text(function(index, dateTime) {
+                return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('LL');
+            });
+            $(".weekday").text(function(index, dateTime) {
+                return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('dddd');
+            });
+            $(".time").text(function(index, dateTime) {
+                return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('LT');
+            });
+            $(".calendar").text(function(index, dateTime) {
+                return moment(dateTime, "YYYY-MM-DD`T`hh:mm").calendar();
+            });
+            $(".fromNow").text(function(index, dateTime) {
+                return moment(dateTime, "YYYY-MM-DD`T`hh:mm").fromNow();
+            });
+            $(".date-weekday-time").text(function(index, dateTime) {
+                return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('LLLL');
+            });
+        })
+    
+	
+	
+	
+	
+	</script>
+</div>

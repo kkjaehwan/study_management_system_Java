@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragment.html::head">
+
+</head>
+<body class="bg-light">
+	<div th:replace="fragment.html::main-navi"></div>
+	<div class="alert alert-warning" role="alert" th:if="${account!=null && !account.emailVerified}">
+		if you want to finish sign-up,
+		<a href="#" th:href="@{/check-email}" class="alert-link">check your email.</a>
+	</div>
+	<!-- Sign-up form part Start -->
+	<div class="container">
+		<div class="py-5 text-center">
+			<h2>Developer Profile</h2>
+		</div>
+		<div class="row mt-3 justify-content-center">
+			<div class="col-10">
+				<table>
+					<tbody>
+						<tr>
+							<td colspan="2" rowspan="1"><p>
+									<span><h2>JAEHWAN KIM</h2></span>
+								</p></td>
+							<td colspan="2" rowspan="1" style="text-align:right">
+								<p>
+									<span>
+										<a href="mailto:kkjaehwan@gmail.com">kkjaehwan@gmail.com</a>
+									</span>
+									<span>&nbsp;</span>
+								</p>
+								<p>
+									<span>40 High Park Ave, Toronto, Ontario, M6P 2S1</span>
+								</p></td>
+						</tr>
+						<tr>
+							<td colspan="4" rowspan="1"><p>
+									<span></span>
+								</p></td>
+						</tr>
+						<tr>
+							<td colspan="4" rowspan="1"><ul>
+									<li><span>Web Back End Developer since 2011 with experiences in various stages of the development cycle for web-based solution projects.</span></li>
+									<li><span>Familiar with developing Java-based Back End and Javascript-based Front End.</span></li>
+								</ul></td>
+						</tr>
+						<tr>
+							<td colspan="4" rowspan="1"><p>
+									<span></span>
+								</p></td>
+						</tr>
+						<tr>
+							<td colspan="4" rowspan="1"><p>
+									<span><b>SKILLS</b></span>
+								</p></td>
+						</tr>
+						<tr>
+							<td colspan="3" rowspan="1"><ul>
+									<li><span>Java/C</span></li>
+									<li><span>Spring/Spring Boot/Struts2</span></li>
+									<li><span>RDB(PostgreSQL, Oracle, MySQL, MariaDB, MSSQL, Infomix)</span></li>
+									<li><span>REST Web Services</span></li>
+								</ul></td>
+							<td colspan="1" rowspan="1"><ul>
+									<li><span>Junit</span></li>
+									<li><span>Javascript/jQuery /Bootstrap</span></li>
+									<li><span>Thymeleaf/JSP</span></li>
+									<li><span>Git/SVN</span></li>
+									<li><span>Tomcat/Jeus/WebTob</span></li>
+								</ul></td>
+						</tr>
+						<tr>
+							<td colspan="4" rowspan="1"><p>
+									<span></span>
+								</p></td>
+						</tr>
+						<tr>
+							<td colspan="4" rowspan="1"><p>
+									<span><b>EXPERIENCES</b></span>
+								</p></td>
+						</tr>
+						<tr>
+							<td colspan="1" rowspan="1"><p>
+									<span><b>2020/04 -</b></span>
+								</p>
+								<p>
+									<span><b>Present</b></span>
+								</p></td>
+							<td colspan="3" rowspan="1"><p>
+									<span>Pending Permanent Resident Permit | Unemployed</span>
+								</p>
+								<p>
+									<span>Toronto, Canada</span>
+								</p></td>
+						</tr>
+						<tr>
+							<td colspan="1" rowspan="1"><p>
+									<span></span>
+								</p></td>
+							<td colspan="3" rowspan="1"><p>
+									<span>Projects:</span>
+								</p>
+								<p>
+									<span>ShareKnot System &ndash; Studying and Developing (2021/01 &ndash; Present)</span>
+								</p>
+								<ul>
+									<li><span>Subscription via email, simple free board, group management</span></li>
+									<li><span>Development Environments</span></li>
+								</ul>
+								<ul>
+									<li><span>Back End : Java (Spring Boot)</span></li>
+									<li><span>Front End : Thymeleaf, Bootstrap, jQuery, Vanilla JS, HTML, CSS</span></li>
+									<li><span>Server : Undefined</span></li>
+									<li><span>Web : Tomcat</span></li>
+									<li><span>DB : PostgreSQL/H2</span></li>
+								</ul>
+								<p>
+									<span>English Learning</span>
+									<span>&nbsp;&ndash; Self-Study (</span>
+									<span>2020/04 &ndash; Present)</span>
+								</p></td>
+						</tr>
+						<tr>
+							<td colspan="1" rowspan="1"><p>
+									<span></span>
+								</p></td>
+							<td colspan="3" rowspan="1"><p>
+									<span></span>
+								</p></td>
+						</tr>
+						<tr>
+							<td colspan="1" rowspan="1"><p>
+									<span><b>2015/05 -</b></span>
+								</p>
+								<p>
+									<span><b>2020/03</b></span>
+								</p></td>
+							<td colspan="3" rowspan="1"><p>
+									<span>Nonghyup Bank | Assistant Manager |</span>
+									<span>&nbsp;</span>
+									<span>
+										<a href="https://banking.nonghyup.com">https://banking.nonghyup.com</a>
+									</span>
+								</p>
+								<p>
+									<span>Uiwang-si, Gyeonggi-do, South Korea</span>
+								</p></td>
+						</tr>
+						<tr>
+							<td colspan="1" rowspan="1"><p>
+									<span></span>
+								</p></td>
+							<td colspan="3" rowspan="1"><p>
+									<span>Projects:</span>
+								</p>
+								<p>
+									<span>Withholding Tax System development/maintenance/management</span>
+								</p>
+								<ul>
+									<li><span>Renewed the system annually to reflect the revision of the tax law.</span></li>
+									<li><span>Extracted data on individuals and corporations requested by the National Tax Service periodically and provided it to the National Tax Service.</span></li>
+									<li><span>Generated withholding tax receipt for customer and governments including the National Tax Service to comply with tax law.</span></li>
+									<li><span>Created monthly withholding tax reports and payments to governments including the National Tax Service.</span></li>
+									<li><span>Development Environments</span></li>
+								</ul>
+								<ul>
+									<li><span>Back End : Pro*C</span></li>
+									<li><span>Front End : JSP, Vanilla JS, HTML, CSS</span></li>
+									<li><span>Server : HP &amp; Oracle</span></li>
+									<li><span>Web : Jeus, Webtob</span></li>
+									<li><span>DB : Oracle</span></li>
+								</ul>
+								<p>
+									<span>Transaction Management System development/maintenance/management</span>
+								</p>
+								<ul>
+									<li><span>Managed transactions generated by bank branches to prevent accidents between transactions in banking business.</span></li>
+									<li><span>Provided an electronic document approval system at branches.</span></li>
+									<li><span>Development Environments</span></li>
+								</ul>
+								<ul>
+									<li><span>Back End : C</span></li>
+									<li><span>Front End : Easy Builder</span></li>
+									<li><span>Server : HP</span></li>
+									<li><span>DB : Tibero/Infomix</span></li>
+								</ul></td>
+						</tr>
+						<tr>
+							<td colspan="1" rowspan="1"><p>
+									<span></span>
+								</p></td>
+							<td colspan="3" rowspan="1"><p>
+									<span></span>
+								</p></td>
+						</tr>
+						<tr>
+							<td colspan="1" rowspan="1"><p>
+									<span><b>2014/12 -</b></span>
+								</p>
+								<p>
+									<span><b>2015/05</b></span>
+								</p></td>
+							<td colspan="3" rowspan="1"><p>
+									<span>Zeniel Co., Ltd. | Assistant Manager |</span>
+									<span>&nbsp;</span>
+									<span>
+										<a href="http://www.zeniel.com">http://www.zeniel.com</a>
+									</span>
+								</p>
+								<p>
+									<span>Seoul, South Korea</span>
+								</p></td>
+						</tr>
+						<tr>
+							<td colspan="1" rowspan="1"><p>
+									<span></span>
+								</p></td>
+							<td colspan="3" rowspan="1"><p>
+									<span>Development Environments</span>
+								</p>
+								<ul>
+									<li><span>Back End : Java (Spring)</span></li>
+									<li><span>Front End : JSP, Vanilla JS, jQuery, HTML, CSS</span></li>
+									<li><span>Server : CentOS</span></li>
+									<li><span>Web : Tomcat</span></li>
+									<li><span>DB : MariaDB</span></li>
+								</ul>
+								<p>
+									<span>Developed Projects</span>
+								</p>
+								<ul>
+									<li><span>New Groupware System</span></li>
+								</ul>
+								<ul>
+									<li><span>Configured requirements for initial development </span></li>
+								</ul>
+								<ul>
+									<li><span>Internal Library System </span></li>
+									<li><span>Employee Working Hour Recording System</span></li>
+								</ul></td>
+						</tr>
+						<tr>
+							<td colspan="1" rowspan="1"><p>
+									<span></span>
+								</p></td>
+							<td colspan="3" rowspan="1"><p>
+									<span></span>
+								</p></td>
+						</tr>
+						<tr>
+							<td colspan="1" rowspan="1"><p>
+									<span><b>2011/03 -</b></span>
+								</p>
+								<p>
+									<span><b>2014/11</b></span>
+								</p></td>
+							<td colspan="3" rowspan="1"><p>
+									<span>LSWare Inc. | Assistant Developer |</span>
+									<span>&nbsp;</span>
+									<span>
+										<a href="http://lsware.com">http://lsware.com</a>
+									</span>
+								</p>
+								<p>
+									<span>Seoul, South Korea</span>
+								</p></td>
+						</tr>
+						<tr>
+							<td colspan="1" rowspan="1"><p>
+									<span></span>
+								</p></td>
+							<td colspan="3" rowspan="1"><p>
+									<span>Development Environments</span>
+								</p>
+								<ul>
+									<li><span>Back End : Java (Struts2)</span></li>
+									<li><span>Front End : JSP, Vanilla JS, jQuery, HTML, CSS</span></li>
+									<li><span>Server : Windows Server</span></li>
+									<li><span>Web : Tomcat</span></li>
+									<li><span>DB : MSSQL</span></li>
+								</ul>
+								<p>
+									<span>Developed Projects</span>
+								</p>
+								<ul>
+									<li><span>Web Console of Windows User Access Control System (Windows UAC) </span></li>
+								</ul>
+								<ul>
+									<li><span>Developed a service program which allows or blocks users to access a specific Windows server and provides a dashboard.</span></li>
+								</ul>
+								<ul>
+									<li><span>Web Console of Windows User Session Logging System (Windows USL)</span></li>
+								</ul>
+								<ul>
+									<li><span>Developed a program which displays the history of authorized/ unauthorized user activities and analyzes the activities on a particular Windows server and provide reports. </span></li>
+								</ul>
+								<ul>
+									<li><span>Web Console of Vulnerability Assessment System</span></li>
+								</ul>
+								<ul>
+									<li><span>Contributed in developing a system which checks a server for vulnerabilities and suggests a way to improve security for Linux and Unix Server.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
+								</ul></td>
+						</tr>
+						<tr>
+							<td colspan="4" rowspan="1"><p>
+									<span></span>
+								</p></td>
+						</tr>
+						<tr>
+							<td colspan="4" rowspan="1"><p>
+									<span><b>EDUCATION</b></span>
+								</p></td>
+						</tr>
+						<tr>
+							<td colspan="1" rowspan="1"><p>
+									<span><b>2007/03 -</b></span>
+								</p>
+								<p>
+									<span><b>2015/08</b></span>
+								</p></td>
+							<td colspan="3" rowspan="1"><p>
+									<span>KOREA UNIVERSITY OF TECHNOLOGY AND EDUCATION</span>
+									<span>&nbsp;| </span>
+									<span>
+										<a href="https://www.koreatech.ac.kr">https://www.koreatech.ac.kr</a>
+									</span>
+									<span>&nbsp;</span>
+								</p>
+								<p>
+									<span>Cheonan-si, Chungcheongnam-do, South Korea</span>
+								</p></td>
+						</tr>
+						<tr>
+							<td colspan="1" rowspan="1"><p>
+									<span></span>
+								</p></td>
+							<td colspan="3" rowspan="1"><ul>
+									<li><span>School of Information Technology Computer Engineering </span></li>
+									<li><span>Bachelor of Science in Engineering</span></li>
+								</ul></td>
+						</tr>
+					</tbody>
+				</table>
+
+
+			</div>
+		</div>
+
+		<div th:replace="fragment.html::footer"></div>
+	</div>
+	<!-- Sign-up form part End -->
+</body>
+</html>

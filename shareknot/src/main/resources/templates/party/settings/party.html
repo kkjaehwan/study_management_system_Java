@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragment.html::head">
+</head>
+<body class="bg-light">
+	<div th:replace="fragment.html::main-navi"></div>
+	<div th:replace="fragment.html::party-banner"></div>
+	<!-- Sign-up form part Start -->
+	<div class="container">
+		<div th:replace="fragment.html::party-info"></div>
+		<div th:replace="fragment.html::party-menu(partyMenu='settings')"></div>
+
+		<div class="row mt-3 justify-content-center">
+			<div class="col-2">
+				<div th:replace="fragment.html::party-settings-menu(currentMenu='party')"></div>
+			</div>
+			<div class="col-8">
+				<div th:replace="fragment.html::messageBox"></div>
+				<div class="row">
+					<h5 class="col-sm-12">Party Search Allow/Deny</h5>
+					<form th:if="${!party.published && party.closed}" class="col-sm-12" action="#" th:action="@{'/party/' + ${party.getPath()} + '/settings/search/allow'}" method="post" novalidate>
+						<div class="alert alert-info" role="alert">Click the button if you are ready to reveal the party to other users. Make sure you have registered an introduction, banner image, party topic, and activity area. When the party is released, it sends notifications to key activity areas and other users interested in the party topic.</div>
+						<div class="form-group">
+							<button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp">Party Search Allow</button>
+						</div>
+						<div th:if="${party.closed}" class="col-sm-12 alert alert-info">
+							This party was closed at
+							<span class="date-time" th:text="${#temporals.format(party.closedDateTime, 'yyyy/MM/dd HH:mm')}"></span>
+							. Click the button to reveal the party again.
+						</div>
+					</form>
+					<form th:if="${party.published && !party.closed}" class="col-sm-12" action="#" th:action="@{'/party/' + ${party.getPath()} + '/settings/search/deny'}" method="post" novalidate>
+						<div class="alert alert-warning" role="alert">Stop allowing parties to search.</div>
+						<div class="form-group">
+							<button class="btn btn-outline-warning" type="submit" aria-describedby="submitHelp">Party Search Deny</button>
+						</div>
+					</form>
+				</div>
+
+				<hr th:if="${!party.recruiting}" />
+				<div class="row" th:if="${!party.recruiting}">
+					<h5 class="col-sm-12">Start recruiting party members</h5>
+					<form class="col-sm-12" action="#" th:action="@{'/party/' + ${party.getPath()} + '/settings/recruit/allow'}" method="post" novalidate>
+						<div class="alert alert-info" role="alert">Recruit party members. If you have recruited enough party members, you can stop recruiting. The party recruiting setting can only be changed once an hour.</div>
+						<div th:if="${!party.canUpdateRecruiting()}" class="form-group">
+							<button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp" disabled>Start recruiting party members</button>
+						</div>
+						<div th:if="${party.canUpdateRecruiting()}" class="form-group">
+							<button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp">Start recruiting party members</button>
+						</div>
+						<div th:if="${party.closed}" class="col-sm-12 alert alert-info">
+							This recruiting party member option was changed at
+							<span class="date-time" th:text="${#temporals.format(party.recruitingUpdatedDateTime, 'yyyy/MM/dd HH:mm')}"></span>
+						</div>
+					</form>
+				</div>
+
+				<hr th:if="${party.recruiting}" />
+				<div class="row" th:if="${party.recruiting}">
+					<h5 class="col-sm-12">Stop recruiting party members</h5>
+					<form class="col-sm-12" action="#" th:action="@{'/party/' + ${party.getPath()} + '/settings/recruit/deny'}" method="post" novalidate>
+						<div class="alert alert-primary" role="alert">Stop recruiting party members. You can start recruiting party members again when you need to hire more party members. The party recruiting setting can only be changed once an hour.</div>
+						<div th:if="${!party.canUpdateRecruiting()}" class="form-group">
+							<button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp" disabled>Stop recruiting party members</button>
+						</div>
+						<div th:if="${party.canUpdateRecruiting()}" class="form-group">
+							<button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp">Stop recruiting party members</button>
+						</div>
+						<div th:if="${party.closed}" class="col-sm-12 alert alert-info">
+							This recruiting party member option was changed at
+							<span class="date-time" th:text="${#temporals.format(party.recruitingUpdatedDateTime, 'yyyy/MM/dd HH:mm')}"></span>
+						</div>
+					</form>
+				</div>
+
+
+				<hr />
+				<div class="row">
+					<h5 class="col-sm-12">Party Path</h5>
+					<form class="col-sm-12 needs-validation" th:object="${partyPathForm}" th:action="@{'/party/' + ${party.path} + '/settings/path/update'}" method="post" novalidate>
+						<div class="alert alert-warning" role="alert">
+							If you modify the party path, you will not be able to access the party with the previously used path, so be careful. <br />
+						</div>
+						<div class="form-group">
+							<input id="path" type="text" th:field="*{path}" name="newPath" th:value="${party.path}" class="form-control" placeholder="ex) party-path" aria-describedby="pathHelp" required>
+							<small id="pathHelp" class="form-text text-muted">
+								Enter letters, numbers, dashes (-) and underbars (_) without spaces, not less than 3 but not more than 20 characters. Use for party home addresses. ex) /party/<b>party-path</b>
+							</small>
+							<small class="invalid-feedback">Please enter the party path</small>
+							<small class="form-text text-danger" th:if="${#fields.hasErrors('path')}" th:errors="*{path}">Path Error</small>
+
+						</div>
+						<div class="form-group">
+							<button class="btn btn-outline-warning" type="submit" aria-describedby="submitHelp">Modify Party Path</button>
+						</div>
+					</form>
+				</div>
+
+				<hr />
+				<div class="row">
+					<h5 class="col-12">Party Title</h5>
+					<form class="needs-validation col-12" action="#" th:object="${partyTitleForm}" th:action="@{'/party/' + ${party.path} + '/settings/title/update'}" method="post" novalidate>
+						<div class="alert alert-warning" role="alert">
+							Modify Party Title<br />
+						</div>
+						<div class="form-group">
+							<label for="title">Party Title</label>
+							<input id="title" type="text" th:field="*{title}" name="newTitle" th:value="${party.title}" class="form-control" placeholder="Party Title" aria-describedby="titleHelp" required maxlength="50">
+							<small id="titleHelp" class="form-text text-muted"> Please enter a party title in less than 50 characters. </small>
+							<small class="invalid-feedback">Please enter a party title </small>
+							<small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:text="*{title}">Title Error</small>
+						</div>
+						<div class="form-group">
+							<button class="btn btn-outline-warning" type="submit" aria-describedby="submitHelp">Modify Party Title</button>
+						</div>
+					</form>
+				</div>
+
+				<hr />
+				<div class="row">
+					<h5 class="col-sm-12 text-danger">Remove Party</h5>
+					<form class="col-sm-12" action="#" th:action="@{'/party/' + ${party.getPath()} + '/settings/party/remove'}" method="post" novalidate>
+						<div class="alert alert-danger" role="alert">Deleting a party, deletes all party-related records and cannot be recovered.</div>
+						<div class="form-group">
+							<button class="btn btn-outline-danger" type="submit" aria-describedby="submitHelp">Remove Party</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:replace="fragment.html::footer"></div>
+	<script th:replace="fragment.html::tooltip"></script>
+	<script th:replace="fragment.html::form-validation"></script>
+</body>
+</html>

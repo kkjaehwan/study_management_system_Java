@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment.html::head">
+</head>
+<body class="bg-light">
+	<div th:replace="fragment.html::main-navi"></div>
+	<!-- Sign-up form part Start -->
+	<div class="container">
+		<div class="py-5 text-center">
+			<h2>Login Without Password</h2>
+		</div>
+		<div th:replace="fragment.html::messageBox"></div>
+		<div th:if="${error}" class="alert alert-danger text-center mt-3" role="alert" th:text="${error}">
+			<p class="lead" th:text="${email}">your email</p>
+			<p class="lead">
+				The time the email was sent is
+				<span th:text="${#temporals.format(emailLoginTokenGenerateAt, 'yyyy/MM/dd HH:mm')}"></span>
+			</p>
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">x</span>
+			</button>
+		</div>
+		<div class="row justify-content-center">
+			<form class="needs-validation col-sm-6" action="#" th:action="@{/email-login}" method="post" novalidate>
+				<div class="form-group">
+					<label for="email">The email</label>
+					<input id="email" type="email" name="email" class="form-control" placeholder="your@email.com" aria-describedby="emailHelp" required>
+					<small id="emailHelp" class="form-text text-muted">Please write down the email you wrote when you signed up. </small>
+					<small class="invalid-feedback">Please enter an email.</small>
+				</div>
+
+				<div class="d-grid gap-2">
+					<button class="btn btn-success btn-block" type="submit">Send Login Link</button>
+				</div>
+				<small id="submitHelp" class="form-text text-muted">
+					If this is your first time visit,
+					<a href="/sign-up">create an account</a>
+					first.
+				</small>
+			</form>
+		</div>
+		<div th:replace="fragment.html::footer"></div>
+	</div>
+	<!-- Sign-up form part End -->
+	<script th:replace="fragment.html::form-validation"></script>
+</body>
+</html>

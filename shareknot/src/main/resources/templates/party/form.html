@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment.html::head">
+</head>
+<body class="bg-light">
+	<div th:replace="fragment.html::main-navi"></div>
+	<!-- Sign-up form part Start -->
+	<div class="container">
+		<div class="py-5 text-center">
+			<h2>Create Party</h2>
+		</div>
+		<div class="row justify-content-center">
+			<form class="needs-validation col-sm-10" action="#" th:action="@{/new-party}" th:object="${partyForm}" method="post" novalidate>
+				<div class="form-group">
+					<label for="path">Party URL</label>
+					<input id="path" type="text" th:field="*{path}" class="form-control" placeholder="ex) party-path" aria-describedby="pathHelp" required min="2" max="20">
+					<small id="pathHelp" class="form-text text-muted">
+						Enter characters, numbers, dashes (-) and underbars (_) without spaces, not less than 2 but no more than 20 characters. It will be used for party home addresses. ex) /party/<b>party-path</b>
+					</small>
+					<small class="invalid-feedback">Please enter a party path.</small>
+					<small class="form-text text-danger" th:if="${#fields.hasErrors('path')}" th:errors="*{path}">Path Error</small>
+				</div>
+
+				<div class="form-group">
+					<label for="title">Party Name</label>
+					<input id="title" type="text" th:field="*{title}" class="form-control" placeholder="party name" aria-describedby="titleHelp" required max="50">
+					<small id="titleHelp" class="form-text text-muted"> Please enter a party name in less than 50 characters. </small>
+					<small class="invalid-feedback">Please enter a party name</small>
+					<small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Name Error</small>
+				</div>
+
+				<div class="form-group">
+					<label for="shortDescription">A brief introduction</label>
+					<textarea id="shortDescription" type="textarea" th:field="*{shortDescription}" class="form-control" placeholder="Please introduce the party briefly." aria-describedby="shortDescriptionHelp" required maxlength="100"></textarea>
+					<small id="shortDescriptionHelp" class="form-text text-muted">Please introduce the party in less than 100 characters.</small>
+					<small class="invalid-feedback">Please introduce the party in less than 100 characters.</small>
+					<small class="form-text text-danger" th:if="${#fields.hasErrors('shortDescription')}" th:errors="*{shortDescription}">ShortDescription Error</small>
+				</div>
+
+				<div class="form-group">
+					<label for="fullDescription">Detailed Introduction</label>
+					<textarea id="fullDescription" type="textarea" th:field="*{fullDescription}" class="editor form-control" placeholder="Please explain the party in detail." aria-describedby="fullDescriptionHelp" required></textarea>
+					<small id="fullDescriptionHelp" class="form-text text-muted"> Please write about the party in detail, such as the goal, schedule, how to proceed, the textbook or Internet course to be used, and the party members being recruited. </small>
+					<small class="invalid-feedback">Please enter a detailed introduction.</small>
+					<small class="form-text text-danger" th:if="${#fields.hasErrors('fullDescription')}" th:errors="*{fullDescription}">FullDescription Error</small>
+				</div>
+
+				<div class="form-group">
+					<button class="btn btn-primary btn-block" type="submit" aria-describedby="submitHelp">Create party</button>
+				</div>
+
+			</form>
+		</div>
+		<div th:replace="fragment.html::footer"></div>
+	</div>
+	<!-- Sign-up form part End -->
+	<script th:replace="fragment.html::form-validation"></script>
+	<script th:replace="fragment.html::editor-script"></script>
+
+	</script>
+</body>
+</html>

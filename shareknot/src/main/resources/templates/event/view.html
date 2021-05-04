@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragment.html::head"></head>
+<body>
+	<nav th:replace="fragment.html::main-navi"></nav>
+	<div th:replace="fragment.html::party-banner"></div>
+	<div class="container">
+		<div class="row py-4 text-left justify-content-center bg-light">
+			<div class="col-6">
+				<span class="h2"> <a href="#" class="text-decoration-none"
+					th:href="@{'/party/' + ${party.path}}"> <span
+						th:text="${party.title}">Name of Party</span>
+				</a> /
+				</span> <span class="h2" th:text="${event.title}"></span>
+			</div>
+
+			<div class="col-4 text-right justify-content-end">
+				<span sec:authorize="isAuthenticated()">
+					<button th:if="${event.isEnrolableFor(#authentication.principal)}"
+						class="btn btn-outline-primary" data-toggle="modal"
+						data-target="#enrol">
+						<i class="fa fa-plus-circle"></i> Apply enrolment
+					</button>
+					<button
+						th:if="${event.isDisenrolableFor(#authentication.principal)}"
+						class="btn btn-outline-primary" data-toggle="modal"
+						data-target="#disenrol">
+						<i class="fa fa-minus-circle"></i> Cancel enrolment
+					</button> <span class="text-success"
+					th:if="${event.isAttended(#authentication.principal)}" disabled>
+						<i class="fa fa-check-circle"></i>Attendance Completed
+				</span>
+				</span>
+			</div>
+			<div class="modal fade" id="enrol" tabindex="-1" role="dialog"
+				aria-labelledby="enrolmentTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="enrolmentTitle"
+								th:text="${event.title}"></h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							Would you like to attend the
+							<p>meeting? It's good to register the schedule in the
+								calendar.</p>
+							<p>
+								Click the <strong>OK</strong> button to join the meeting.
+							</p>
+							<p>Thank you.</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">Close</button>
+							<form
+								th:action="@{'/party/' + ${party.path} + '/events/' + ${event.id} + '/enrol'}"
+								method="post">
+								<button class="btn btn-primary" type="submit"
+									aria-describedby="submitHelp">Confirm</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="disenrol" tabindex="-1" role="dialog"
+			aria-labelledby="leaveTitle" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="leaveTitle" th:text="${event.title}"></h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						Are you sure you want to cancel your participation in the
+						<p>meeting?</p>
+						<p>
+							<strong>Confirm</strong> to cancel this entry and give other
+							waiters a chance to attend.
+						</p>
+						<p>Thank you.</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Close</button>
+						<form
+							th:action="@{'/party/' + ${party.path} + '/events/' + ${event.id} + '/disenrol'}"
+							method="post">
+							<button class="btn btn-primary" type="submit"
+								aria-describedby="submitHelp">Confirm</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row py-4 text-left justify-content-center bg-light">
+			<div class="col-2 font-weight-light">Recruitment method</div>
+			<div class="col-2 text-left justify-content-center">
+				<span
+					th:if="${event.eventType == T(com.shareknot.modules.event.EventType).FCFS}">First
+					come, first served.</span> <span
+					th:if="${event.eventType == T(com.shareknot.modules.event.EventType).CONFIRMATIVE}">Confirmed
+					by Manager</span>
+			</div>
+
+			<div class="col-2 font-weight-light">the number of applicants</div>
+			<div class="col-2 text-left justify-content-center">
+				<span th:text="${event.limitOfEnrolments}"></span>
+			</div>
+		</div>
+
+		<div class="row py-4 text-left justify-content-center bg-light">
+
+			<div class="col-2 font-weight-light">Registration Deadline Date</div>
+			<div class="col-2 text-left justify-content-center">
+				<span class="date" th:text="${event.endEnrolmentDateTime}"></span> <span
+					class="weekday" th:text="${event.endEnrolmentDateTime}"></span> <br />
+				<span class="time" th:text="${event.endEnrolmentDateTime}"></span>
+			</div>
+
+			<div class="col-2 font-weight-light">Meeting Start Date</div>
+			<div class="col-2 text-left justify-content-center">
+				<span class="date" th:text="${event.startDateTime}"></span> <span
+					class="weekday" th:text="${event.startDateTime}"></span> <br /> <span
+					class="time" th:text="${event.startDateTime}"></span> - <span
+					class="time" th:text="${event.endDateTime}"></span>
+			</div>
+		</div>
+
+		<div class="row py-4 text-left justify-content-center bg-light">
+
+			<div class="col-2 font-weight-light">Meeting Manager</div>
+			<div class="col-2 text-left justify-content-center">
+				<a th:href="@{'/profile/' + ${event.createdBy?.nickname}}"
+					class="text-decoration-none"> <svg
+						th:if="${#strings.isEmpty(event.createdBy?.profileImage)}"
+						th:data-jdenticon-value="${event.createdBy?.nickname}" width="24"
+						height="24" class="rounded border bg-light"></svg> <img
+					th:if="${!#strings.isEmpty(event.createdBy?.profileImage)}"
+					th:src="${event.createdBy?.profileImage}" width="24" height="24"
+					class="rounded border" /> <span
+					th:text="${event.createdBy?.nickname}"></span>
+				</a>
+			</div>
+
+			<div th:if="${party.isManager(#authentication.principal)}"
+				class="col-2 font-weight-light">Manage Meeting</div>
+			<div th:if="${party.isManager(#authentication.principal)}"
+				class="col-2 text-left justify-content-center">
+				<a class="btn btn-outline-primary btn-sm my-1"
+					th:href="@{'/party/' + ${party.path} + '/events/' + ${event.id} + '/edit'}">
+					Modify Meeting</a> <br />
+				<button class="btn btn-outline-danger btn-sm" data-toggle="modal"
+					data-target="#cancel">Cancel Meeting</button>
+			</div>
+			
+			<div th:if="${!party.isManager(#authentication.principal)}"
+				class="col-2 font-weight-light"></div>
+			<div th:if="${!party.isManager(#authentication.principal)}"
+				class="col-2 text-left justify-content-center">				
+			</div>
+		</div>
+		<div class="row px-3 justify-content-center">
+		
+			<div class="col-10 pt-3">
+				<dt class="font-weight-light">Detailed meeting description</dt>
+				<dd th:utext="${event.description}"></dd>
+
+				<dt class="font-weight-light">
+					Enrolments ( <span th:text="${event.enrolments.size()}"></span> )
+				</dt>
+				<dd>
+					<table class="table table-borderless table-sm"
+						th:if="${event.enrolments.size() > 0}">
+						<thead>
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">Participant</th>
+								<th scope="col">The date of enrolment</th>
+								<th scope="col">Participation Status</th>
+								<th th:if="${party.isManager(#authentication.principal)}"
+									scope="col">Manage Enrolments</th>
+								<th th:if="${party.isManager(#authentication.principal)}"
+									scope="col">Attendance check</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="enrol: ${event.enrolments}">
+								<th scope="row" th:text="${enrolStat.count}"></th>
+								<td><a th:href="@{'/profile/' + ${enrol.account.nickname}}"
+									class="text-decoration-none"> <svg
+											th:if="${#strings.isEmpty(enrol.account?.profileImage)}"
+											data-jdenticon-value="nickname"
+											th:data-jdenticon-value="${enrol.account.nickname}"
+											width="24" height="24" class="rounded border bg-light"></svg>
+										<img th:if="${!#strings.isEmpty(enrol.account?.profileImage)}"
+										th:src="${enrol.account?.profileImage}" width="24" height="24"
+										class="rounded border" /> <span
+										th:text="${enrol.account.nickname}"></span>
+								</a></td>
+								<td><span class="date-time" th:text="${enrol.enroledAt}"></span></td>
+								<td><span th:if="${enrol.accepted}">accepted</span> <span
+									th:if="${!enrol.accepted}">On standby</span></td>
+								<td th:if="${party.isManager(#authentication.principal)}"><a
+									th:if="${event.canAccept(enrol)}" href="#"
+									class="text-decoration-none"
+									th:href="@{'/party/' + ${party.path} + '/events/' + ${event.id} + '/enrolments/' + ${enrol.id} + '/accept'}">Accept
+								</a> <a th:if="${event.canReject(enrol)}" href="#"
+									class="text-decoration-none"
+									th:href="@{'/party/' + ${party.path} + '/events/' + ${event.id} + '/enrolments/' + ${enrol.id} + '/reject'}">Cancel</a></td>
+								<td th:if="${party.isManager(#authentication.principal)}"><a
+									th:if="${enrol.accepted && !enrol.attended}" href="#"
+									class="text-decoration-none"
+									th:href="@{'/party/' + ${party.path} + '/events/' + ${event.id} + '/enrolments/' + ${enrol.id} + '/checkin'}">Check
+										in</a> <a th:if="${enrol.accepted && enrol.attended}" href="#"
+									class="text-decoration-none"
+									th:href="@{'/party/' + ${party.path} + '/events/' + ${event.id} + '/enrolments/' + ${enrol.id} + '/cancel-checkin'}">Cancel</a></td>
+							</tr>
+						</tbody>
+					</table>
+				</dd>
+			</div>
+			<div class="modal fade" id="cancel" tabindex="-1" role="dialog"
+				aria-labelledby="cancelTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="cancelTitle" th:text="${event.title}"></h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							Are you sure you want to cancel the meeting?
+							</p>
+							<p>
+								<strong>Confirm</strong> to delete this meeting and
+								participation related data.
+							</p>
+							<p>Thank you.</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">Close</button>
+							<form
+								th:action="@{'/party/' + ${party.path} + '/events/' + ${event.id}}"
+								th:method="delete">
+								<button class="btn btn-primary" type="submit"
+									aria-describedby="submitHelp">Confirm</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div th:replace="fragment.html::footer"></div>
+	</div>
+	<script th:replace="fragment.html::date-time"></script>
+</body>
+</html>

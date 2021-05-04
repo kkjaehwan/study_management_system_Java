@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragment.html::head">
+</head>
+<body class="bg-light">
+	<div th:replace="fragment.html::main-navi"></div>
+	<div class="alert alert-warning" role="alert" th:if="${account!=null && !account.emailVerified}">if you want to finish sign-up, <a href="#" th:href="@{/check-email}" class="alert-link">check your email.</a></div>
+	<!-- Sign-up form part Start -->
+	<div class="container">
+		<div th:replace="fragment.html::messageBox"></div>
+		<div class="py-5 text-center">
+			<h2>ShareKnot</h2>
+		</div>
+		<div class="row justify-content-center">
+			<div th:replace="fragment.html::party-list (partyList=${partyList})"></div>
+		</div>
+		<div th:replace="fragment.html::footer"></div>
+	</div>
+	<script th:replace="fragment.html::date-time"></script>
+	<!-- Sign-up form part End -->
+</body>
+</html>
