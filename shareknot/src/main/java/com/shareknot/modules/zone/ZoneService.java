@@ -1,6 +1,10 @@
 package com.shareknot.modules.zone;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
@@ -24,7 +28,7 @@ public class ZoneService {
 
 	@PostConstruct
 	// 빈 초기화 후 실행
-	public void initZoneData() throws IOException {
+	public void initZoneData() throws IOException, URISyntaxException {
 		if (zoneRepository.count() == 0) {
 			List<Zone> zonesKr = extractZone("zones_kr.csv");
 			zoneRepository.saveAll(zonesKr);
@@ -35,16 +39,24 @@ public class ZoneService {
 
 	}
 
-	private List<Zone> extractZone(String fileName) throws IOException {
-		Resource resource = new ClassPathResource(fileName);
+	private List<Zone> extractZone(String fileName) throws IOException, URISyntaxException{
+//		Resource resource = new ClassPathResource(fileName);
+//		List<Zone> zoneList = Files.readAllLines(resource.getFile().toPath(), StandardCharsets.UTF_8)
+//				.stream().map(line -> {
+//					String[] split = line.split(",");
+//					return Zone.builder().city(split[0]).localNameOfCity(split[1]).province(split[2]).country(split[3])
+//							.build();
+//				}).collect(Collectors.toList());
+		
+		InputStream is = new ClassPathResource(fileName).getInputStream();
+		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		List<Zone> zoneList = br.lines().map(line -> {
+			String[] split = line.split(",");
+			return Zone.builder().city(split[0]).localNameOfCity(split[1]).province(split[2]).country(split[3])
+					.build();
+		}).collect(Collectors.toList());
 
-		List<Zone> zoneList = Files.readAllLines(resource.getFile().toPath(), StandardCharsets.UTF_8)
-				.stream()
-				.map(line -> {
-					String[] split = line.split(",");
-					return Zone.builder().city(split[0]).localNameOfCity(split[1]).province(split[2]).country(split[3]).build();
-				})
-				.collect(Collectors.toList());
 		return zoneList;
 	}
+	
 }
