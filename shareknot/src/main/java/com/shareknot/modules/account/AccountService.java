@@ -1,8 +1,11 @@
 package com.shareknot.modules.account;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
@@ -47,6 +50,7 @@ public class AccountService implements UserDetailsService {
 //	private final AuthenticationManager authenticationManager;
 	private final TemplateEngine templateEngine;
 	private final AppProperties appProperties;
+	private final AccountRoleRepository accountRoleRepository;
 
 	public Account processNewAccount(SignUpForm signUpForm) {
 		Account newAccount = saveNewAccount(signUpForm);
@@ -59,6 +63,9 @@ public class AccountService implements UserDetailsService {
 		signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
 
 		Account account = modelMapper.map(signUpForm, Account.class);
+
+		AccountRole userRole = accountRoleRepository.findByName("ROLE_USER");
+		account.setRoles(Stream.of(userRole).collect(Collectors.toSet()));
 
 //		Account account = Account.builder()
 //				.email(signUpForm.getEmail())
@@ -78,16 +85,17 @@ public class AccountService implements UserDetailsService {
 
 		Context context = new Context();
 
-		context.setVariable("link",
-				"/check-email-token?token=" + account.getEmailCheckToken() + "&email=" + account.getEmail());
-		context.setVariable("nickname",account.getNickname());
+		context.setVariable("link", "/check-email-token?token=" + account.getEmailCheckToken()
+				+ "&email=" + account.getEmail());
+		context.setVariable("nickname", account.getNickname());
 		log.info(account.getNickname());
-		context.setVariable("linkName","verify email");
-		context.setVariable("message","If you want to use the ShareKnot service, click on the link.");
+		context.setVariable("linkName", "verify email");
+		context.setVariable("message",
+				"If you want to use the ShareKnot service, click on the link.");
 		context.setVariable("host", appProperties.getHost());
-		
+
 		String message = templateEngine.process("email/simple-link", context);
-		
+
 		EmailMessage emailMessage = EmailMessage.builder()
 				.to(account.getEmail())
 				.subject("ShareKnot, Membership registration certification")
@@ -109,15 +117,22 @@ public class AccountService implements UserDetailsService {
 	}
 
 	public void login(Account account) {
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(new UserAccount(account),
-				account.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
+		UserAccount principal = new UserAccount(account);
+
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+				principal, account.getPassword(), principal.getAuthorities());
+
+//		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+//				principal, account.getPassword(),
+//				List.of(new SimpleGrantedAuthority("ROLE_USER")));
 
 //		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
 //		Authentication authentication= authenticationManager.authenticate(token);
 //		SecurityContext context = SecurityContextHolder.getContext();
 //		context.setAuthentication(authentication);
 
-		SecurityContextHolder.getContext().setAuthentication(token);
+		SecurityContextHolder.getContext()
+				.setAuthentication(token);
 
 	}
 
@@ -175,19 +190,18 @@ public class AccountService implements UserDetailsService {
 	public void sendEmailLogin(Account account) {
 		generateEmailLoginToken(account);
 
-
 		Context context = new Context();
 
-		context.setVariable("link",
-				"/login-by-email?token=" + account.getEmailLoginToken() + "&email=" + account.getEmail());
-		context.setVariable("nickname",account.getNickname());
-		context.setVariable("linkName","Login by email");
-		context.setVariable("message","If you want to login the ShareKnot service, click on the link.");
+		context.setVariable("link", "/login-by-email?token=" + account.getEmailLoginToken()
+				+ "&email=" + account.getEmail());
+		context.setVariable("nickname", account.getNickname());
+		context.setVariable("linkName", "Login by email");
+		context.setVariable("message",
+				"If you want to login the ShareKnot service, click on the link.");
 		context.setVariable("host", appProperties.getHost());
-		
+
 		String message = templateEngine.process("email/simple-link", context);
-		
-		
+
 		EmailMessage emailMessage = EmailMessage.builder()
 				.to(account.getEmail())
 				.subject("ShareKnot, You can login by email")
@@ -210,35 +224,41 @@ public class AccountService implements UserDetailsService {
 
 	public void addTag(Account account, Tag tag) {
 		Optional<Account> findById = accountRepository.findById(account.getId());
-		findById.ifPresent(a -> a.getTags().add(tag));
+		findById.ifPresent(a -> a.getTags()
+				.add(tag));
 	}
 
 	public Set<Tag> getTags(Account account) {
 		Optional<Account> byId = accountRepository.findById(account.getId());
 
-		return byId.orElseThrow().getTags();
+		return byId.orElseThrow()
+				.getTags();
 	}
 
 	public void removeTag(Account account, Tag tag) {
 		Optional<Account> findById = accountRepository.findById(account.getId());
-		findById.ifPresent(a -> a.getTags().remove(tag));
+		findById.ifPresent(a -> a.getTags()
+				.remove(tag));
 	}
 
 	public void addZone(Account account, Zone zone) {
 		Optional<Account> findById = accountRepository.findById(account.getId());
-		findById.ifPresent(a -> a.getZones().add(zone));
+		findById.ifPresent(a -> a.getZones()
+				.add(zone));
 	}
 
 	public Set<Zone> getZones(Account account) {
 		Optional<Account> byId = accountRepository.findById(account.getId());
 
-		return byId.orElseThrow().getZones();
+		return byId.orElseThrow()
+				.getZones();
 	}
 
 	public void removeZone(Account account, Zone zone) {
 		Optional<Account> findById = accountRepository.findById(account.getId());
 
-		findById.ifPresent(a -> a.getZones().remove(zone));
+		findById.ifPresent(a -> a.getZones()
+				.remove(zone));
 	}
 
 }

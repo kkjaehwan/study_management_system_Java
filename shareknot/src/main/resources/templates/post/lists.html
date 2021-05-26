@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragment.html::head">
+
+</head>
+<body class="bg-light">
+	<div th:replace="fragment.html::main-navi"></div>
+	<div class="container">
+		<div class="row text-left ">
+			<div class="col-12 pt-3">
+				<div class="text-left mt-3">
+					<h5 th:text="${board.title}"></h5>
+				</div>
+				<div sec:authorize="isAuthenticated()" class="float-right mb-2">
+					<a th:href="@{'/board/lists/'+${board.title}+'/new-post'}" class="btn btn-info btn-sm" role="button" data-bs-toggle="button">Create Post</a>
+				</div>
+				<table class="table table-hover table-striped text-left">
+					<colgroup>
+						<col width="50">
+						<col>
+					</colgroup>
+					<thead>
+						<tr>
+							<th scope="col" class="th">#</th>
+							<th scope="col" class="th">title</th>
+						</tr>
+					</thead>
+					<tr th:each="ps: ${postPage.getContent()}">
+						<td th:text="${postPage.getTotalElements()-psStat.count+1 -(postPage.getNumber())*postPage.getPageable().getPageSize()}"></td>
+						<td><a th:href="@{'/board/lists/'+${board.title}+'/posts/'+${ps.id}}">
+								<div class="d-flex">
+									<h6 class="flex-grow-1 text-muted" th:text="${ps.title}"></h6>
+									<small class ="text-muted" th:text="${'comments : ' + ps.commentCount}"></small>
+								</div>
+								<div class="d-flex">
+									<small class="flex-grow-1 text-muted">
+										<span th:text="${ps.getAuthor().getNickname()}"></span>
+									</small>
+									<small class="text-muted calendar" th:text="${ps.getCreatedDateTime}">9 mins</small>
+									<small class="text-muted ml-3" th:text="${'view :'+ps.getViewCount}">10</small>
+								</div>
+							</a></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-11">
+				<div class="input-group input-group-sm mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="inputGroup-sizing-sm">Search by title</span>
+					</div>
+					<form class="form-inline" method="get">
+						<input type="search" class="form-control" name="psearch" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="row justify-content-center">
+			<div class="col-sm-11">
+				<nav>
+					<ul class="pagination justify-content-center">
+						<li class="page-item" th:classappend="${!postPage.hasPrevious()}? disabled"><a th:href="@{'/board/lists/'+${board.title}+'/posts?psearch=' + ${psearch} + '&page=' + ${postPage.getNumber() - 1}}" class="page-link" tabindex="-1" aria-disabled="true"> Previous </a></li>
+						<li class="page-item" th:classappend="${i == postPage.getNumber()}? active" th:each="i: ${#numbers.sequence(0, postPage.getTotalPages()==0?0:postPage.getTotalPages() - 1)}"><a th:href="@{'/board/lists/'+${board.title}+'/posts?psearch=' + ${psearch} + '&page=' + ${i}}" class="page-link" href="#" th:text="${i + 1}">1</a></li>
+						<li class="page-item" th:classappend="${!postPage.hasNext()}? disabled"><a th:href="@{'/board/lists/'+${board.title}+'/posts?psearch=' + ${psearch} + '&page=' + ${postPage.getNumber()+ 1}}" class="page-link"> Next </a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</div>
+	<div th:replace="fragment.html::footer"></div>
+	<script th:replace="fragment.html::date-time"></script>
+</body>
+</html>

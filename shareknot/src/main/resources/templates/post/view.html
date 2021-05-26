@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragment.html::head">
+</head>
+<body class="bg-light">
+	<div th:replace="fragment.html::main-navi"></div>
+	<div class="container">
+		<div class="row text-left justify-content-center">
+			<div class="col-12 pt-3">
+				<div class="text-left mt-3">
+					<h5 th:text="${board.title}"></h5>
+				</div>
+				<div sec:authorize="isAuthenticated()" th:if="${post.isAuthor(#authentication.principal)}" class="nav justify-content-end">
+					<button class="btn btn-danger btn-sm mb-2" data-toggle="modal" data-target="#delete">Delete</button>
+				</div>
+				<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="deleteTitle" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="deleteTitle" th:text="${post.title}"></h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">Are you sure you want to delete it?</div>
+							<div class="modal-footer">
+								<form th:action="@{'/board/lists/'+${board.title}+'/posts/'+${post.id}+'/delete'}" method="post">
+									<button class="btn btn-primary btn-sm" type="submit" aria-describedby="submitHelp">Confirm</button>
+								</form>
+								<button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<hr>
+				<div class="d-flex">
+					<h6 class="font-weight-bold flex-grow-1" th:text="${post.title}"></h6>
+					<small class="text-muted" th:text="${'comments : '+ post.commentCount}"></small>
+				</div>
+				<div class="d-flex">
+					<small class="flex-grow-1 text-muted">
+						<span th:text="${post.getAuthor().getNickname()}"></span>
+					</small>
+					<small class="text-muted calendar" th:text="${post.getCreatedDateTime}">9 mins</small>
+					<small class="text-muted ml-3" th:text="${'view :'+post.getViewCount}">10</small>
+				</div>
+
+				<hr>
+				<div class="input-group mb-3">
+					<div th:utext="${post.content}"></div>
+				</div>
+				<div class="float-left">
+					<a sec:authorize="isAuthenticated()"  th:if="${post.isAuthor(#authentication.principal)}" th:href="@{'/board/lists/'+${board.title}+'/posts/'+${post.id}+'/edit'}">
+						<button type="button" class="btn btn-secondary btn-sm">Modify</button>
+					</a>
+				</div>
+				<div class="float-right">
+					<a th:href="@{'/board/lists/'+${board.title}+'/posts/'}">
+						<button type="button" class="btn btn-info btn-sm ">To Lists</button>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="row text-left justify-content-center">
+			<div class="col-12 pt-3">
+				<input id="board_title" type="hidden" th:field="*{board.title}">
+				<input id="post_id" type="hidden" th:field="*{post.id}">
+				<div th:replace="fragment.html::comment-add(commentAddId='form_add_comment')"></div>
+				<div id="lists">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:replace="fragment.html::footer"></div>
+</body>
+<script th:replace="fragment.html::form-validation"></script>
+<script th:replace="fragment.html::ajax-csrf-header"></script>
+<script th:replace="fragment.html::ajax-comments(boardTitle=${board.title},postId=${post.id}, addCommentFormId='form_add_comment',loadTagetId='lists')"></script>
+</html>

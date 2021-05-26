@@ -1,7 +1,9 @@
 package com.shareknot.modules.account;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 
@@ -10,13 +12,19 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
-import com.shareknot.modules.borad.Comment;
-import com.shareknot.modules.borad.Post;
+import org.hibernate.annotations.Type;
+
+import com.shareknot.modules.board.Comment;
+import com.shareknot.modules.board.Post;
 import com.shareknot.modules.tag.Tag;
 import com.shareknot.modules.zone.Zone;
 
@@ -37,7 +45,8 @@ import lombok.Setter;
 public class Account {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_id_generator")
+	@SequenceGenerator(name = "account_id_generator", sequenceName = "account_id_seq", allocationSize = 1)
 	private Long id;
 
 	@Column(unique = true)
@@ -47,6 +56,10 @@ public class Account {
 	private String nickname;
 
 	private String password;
+
+	@ManyToMany
+	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+	private Set<AccountRole> roles;
 
 	private boolean emailVerified;
 
@@ -70,6 +83,7 @@ public class Account {
 
 	@Lob
 	@Basic(fetch = FetchType.EAGER)
+	@Type(type = "org.hibernate.type.TextType")
 	private String profileImage;
 
 	private boolean partyCreatedByEmail;
@@ -92,17 +106,20 @@ public class Account {
 
 	@OneToMany(mappedBy = "author")
 	private Set<Post> posts = new HashSet<>();
+
 	@OneToMany(mappedBy = "author")
 	private Set<Comment> comments = new HashSet<>();
 
 	public void generateEmailCheckToken() {
-		this.emailCheckToken = UUID.randomUUID().toString();
+		this.emailCheckToken = UUID.randomUUID()
+				.toString();
 		this.emailCheckTokenGenerateAt = LocalDateTime.now();
 
 	}
 
 	public void generateEmailLoginToken() {
-		this.emailLoginToken = UUID.randomUUID().toString();
+		this.emailLoginToken = UUID.randomUUID()
+				.toString();
 		this.emailLoginTokenGenerateAt = LocalDateTime.now();
 
 	}
@@ -119,13 +136,15 @@ public class Account {
 	}
 
 	public boolean canSendConfirmEmail() {
-		return this.emailCheckTokenGenerateAt.isBefore(LocalDateTime.now().minusHours(1));
+		return this.emailCheckTokenGenerateAt.isBefore(LocalDateTime.now()
+				.minusHours(1));
 	}
 
 	public boolean canSendEmailLogin() {
 		if (this.emailLoginTokenGenerateAt == null)
 			return true;
-		return this.emailLoginTokenGenerateAt.isBefore(LocalDateTime.now().minusHours(1));
+		return this.emailLoginTokenGenerateAt.isBefore(LocalDateTime.now()
+				.minusHours(1));
 	}
 
 	public boolean isValidLoginToken(String token) {

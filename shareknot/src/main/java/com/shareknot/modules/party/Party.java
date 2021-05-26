@@ -12,11 +12,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
+import javax.persistence.SequenceGenerator;
 
 import com.shareknot.modules.account.Account;
 import com.shareknot.modules.account.UserAccount;
@@ -51,7 +53,8 @@ import lombok.extern.slf4j.Slf4j;
 public class Party {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "party_id_generator")
+	@SequenceGenerator(name = "party_id_generator", sequenceName = "party_id_seq", allocationSize = 1)
 	private Long id;
 
 	@ManyToMany
