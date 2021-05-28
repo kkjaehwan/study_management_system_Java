@@ -15,7 +15,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
 	Comment findFirstByPostOrderByCommentGrpDesc(Post post);
 
-	List<Comment> findAllByPostOrderByCommentGrpDescCommentOdrDesc(Post post);
+	List<Comment> findAllByPostOrderByCommentGrpAscCommentOdrAsc(Post post);
 
 	Comment findFirstByPostAndCommentGrpOrderByCommentOdrAsc(Post post, long comment_group);
 

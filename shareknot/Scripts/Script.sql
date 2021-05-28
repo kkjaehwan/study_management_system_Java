@@ -1,74 +1,59 @@
-    select
-        distinct party0_.id as id1_7_0_,
-        tag2_.id as id1_14_1_,
-        zone4_.id as id1_15_2_,
-        party0_.closed as closed2_7_0_,
-        party0_.closed_date_time as closed_d3_7_0_,
-        party0_.full_description as full_des4_7_0_,
-        party0_.image as image5_7_0_,
-        party0_.member_count as member_c6_7_0_,
-        party0_.path as path7_7_0_,
-        party0_.published as publishe8_7_0_,
-        party0_.published_date_time as publishe9_7_0_,
-        party0_.recruiting as recruit10_7_0_,
-        party0_.recruiting_updated_date_time as recruit11_7_0_,
-        party0_.short_description as short_d12_7_0_,
-        party0_.title as title13_7_0_,
-        party0_.use_banner as use_ban14_7_0_,
-        tag2_.title as title2_14_1_,
-        tags1_.party_id as party_id1_10_0__,
-        tags1_.tags_id as tags_id2_10_0__,
-        zone4_.city as city2_15_2_,
-        zone4_.country as country3_15_2_,
-        zone4_.local_name_of_city as local_na4_15_2_,
-        zone4_.province as province5_15_2_,
-        zones3_.party_id as party_id1_11_1__,
-        zones3_.zones_id as zones_id2_11_1__ 
+SELECT pg_catalog.setval(pg_get_serial_sequence('account_role', 'id'), (SELECT MAX(id) FROM account_role)+1);
+
+SELECT pg_catalog.setval(, (SELECT MAX(id) FROM account_role)+1);
+
+SELECT pg_get_serial_sequence('account_role', 'id');
+
+SELECT pg_catalog.setval(pg_get_serial_sequence('account_role', 'id'), MAX(id)) FROM account_role;
+
+select pg_get_serial_sequence('account', 'id');
+
+
+
+SELECT setval(, (SELECT MAX(id) FROM account_role));
+select pg_get_serial_sequence('account_role_pkey');
+SELECT MAX(id) FROM account_role;
+SELECT MAX(account_role_pkey) FROM account_role;
+SELECT setval(pg_get_serial_sequence('account_role', 'id'), MAX(id)) FROM account_role;
+SELECT nextval('account_role_pkey');
+
+SELECT MAX(id) FROM account_role;
+
+SELECT nextval('the_primary_key_sequence');
+
+
+
+SELECT table_catalog, table_schema, column_name, table_name, column_default
+FROM information_schema.columns
+WHERE table_name = 'account_role' AND column_name = 'id';
+
+SELECT table_catalog, table_schema, column_name, table_name, column_default
+FROM information_schema.columns
+WHERE table_name = 'account' AND column_name = 'id';
+
+SELECT nextval('account_role_id_seq');
+
+
+ALTER SEQUENCE seq RESTART WITH 1;
+UPDATE t SET idcolumn=nextval('seq');
+
+
+select * from public.account_role;
+SELECT currval('accountrole_id_seq');
+SELECT nextval('accountrole_id_seq');
+SELECT setval(pg_get_serial_sequence('accountrole_id_seq', 'id'), (SELECT MAX(id) FROM public.account_role));
+
+SELECT setval('accountrole_id_seq', (SELECT MAX(id) FROM public.account_role));
+
+
+
+
+select
+* 
     from
-        party party0_ 
-    left outer join
-        party_tags tags1_ 
-            on party0_.id=tags1_.party_id 
-    left outer join
-        tag tag2_ 
-            on tags1_.tags_id=tag2_.id 
-    left outer join
-        party_zones zones3_ 
-            on party0_.id=zones3_.party_id 
-    left outer join
-        zone zone4_ 
-            on zones3_.zones_id=zone4_.id 
+        comment comment0_ 
     where
-        party0_.published=true 
-        and party0_.closed=false 
-        and (
-            lower(party0_.title) like '%test%' escape '!'
-        ) 
-        or exists (
-            select
-                1 
-            from
-                party_tags tags5_,
-                tag tag6_ 
-            where
-                party0_.id=tags5_.party_id 
-                and tags5_.tags_id=tag6_.id 
-                and (
-                    lower(tag6_.title) like '%test%' escape '!'
-                )
-        ) 
-        or exists (
-            select
-                1 
-            from
-                party_zones zones7_,
-                zone zone8_ 
-            where
-                party0_.id=zones7_.party_id 
-                and zones7_.zones_id=zone8_.id 
-                and (
-                    lower(zone8_.local_name_of_city) like '%test%' escape '!'
-                )
-        ) 
+        comment0_.post_id=41
     order by
-        party0_.published_date_time desc
+        comment0_.comment_grp asc,
+        comment0_.comment_odr asc;

@@ -19,33 +19,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shareknot.modules.account.Account;
-import com.shareknot.modules.account.AccountRepository;
-import com.shareknot.modules.account.AccountService;
+import com.shareknot.infra.AbstractContainerBase;
+import com.shareknot.infra.MockMvcTest;
 import com.shareknot.modules.account.form.TagForm;
 import com.shareknot.modules.tag.Tag;
 import com.shareknot.modules.tag.TagRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Transactional
-@SpringBootTest
-@AutoConfigureMockMvc
+@MockMvcTest
 @Slf4j
-class SettingsControllerTest {
+class SettingsControllerTest extends AbstractContainerBase {
 
 	@Autowired
 	MockMvc mockMvc;

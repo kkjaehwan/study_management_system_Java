@@ -18,23 +18,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.shareknot.infra.AbstractContainerBase;
+import com.shareknot.infra.TestContainerBasePostgres;
+import com.shareknot.infra.MockMvcTest;
 import com.shareknot.infra.email.EmailMessage;
 import com.shareknot.infra.email.EmailService;
-import com.shareknot.modules.account.Account;
-import com.shareknot.modules.account.AccountRepository;
+import com.shareknot.modules.account.form.SignUpForm;
 
-@Transactional
-@SpringBootTest
-@AutoConfigureMockMvc
-class AccountControllerTest {
+import lombok.extern.slf4j.Slf4j;
+
+@MockMvcTest
+@Slf4j
+class AccountControllerTest extends AbstractContainerBase {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -42,13 +40,17 @@ class AccountControllerTest {
 	@Autowired
 	private AccountRepository accountRepository;
 
+	@Autowired
+	private AccountService accountService;
+
 	@MockBean
 	EmailService emailService;
 
 	@DisplayName("check confirmation email - wrong")
 	@Test
 	void checkEmailToken_with_wrong_input() throws Exception {
-		mockMvc.perform(get("/check-email-token").param("token", "test").param("email", "kjaehwan89@gmail.com"))
+		mockMvc.perform(get("/check-email-token").param("token", "test")
+				.param("email", "kjaehwan89@gmail.com"))
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(model().attributeExists("error"))
@@ -59,13 +61,16 @@ class AccountControllerTest {
 	@DisplayName("check confirmation email - correct")
 	@Test
 	void checkEmailToken() throws Exception {
-		Account account = Account.builder().email("test@gmail.com").password("test").nickname("test").build();
 
-		Account newAccount = accountRepository.save(account);
-		newAccount.generateEmailCheckToken();
+		SignUpForm signUpForm = new SignUpForm();
+		signUpForm.setEmail("test@gmail.com");
+		signUpForm.setNickname("test");
+		signUpForm.setPassword("test");
 
-		mockMvc.perform(get("/check-email-token").param("token", newAccount.getEmailCheckToken())
-				.param("email", newAccount.getEmail()))
+		Account account = accountService.processNewAccount(signUpForm);
+
+		mockMvc.perform(get("/check-email-token").param("token", account.getEmailCheckToken())
+				.param("email", account.getEmail()))
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(model().attributeDoesNotExist("error"))
@@ -90,7 +95,7 @@ class AccountControllerTest {
 	@DisplayName("회원가입처리 - 입력 오류")
 	@Test
 	void signUpSubmit_with_wrong_input() throws Exception {
-		mockMvc.perform(post("/sign-up").param("nickname", "kjaehwan89")
+		mockMvc.perform(post("/sign-up").param("nickname", "test")
 				.param("email", "email..")
 				.param("password", "12345")
 				.with(csrf()))
@@ -102,24 +107,26 @@ class AccountControllerTest {
 	@DisplayName("회원가입처리 - 입력 정상")
 	@Test
 	void signUpSubmit_with_correct_input() throws Exception {
-		mockMvc.perform(post("/sign-up").param("nickname", "kjaehwan89")
-				.param("email", "kjaehwan89@gmail.com")
+		mockMvc.perform(post("/sign-up").param("nickname", "test")
+				.param("email", "test@gmail.com")
 				.param("password", "12345678")
 				.with(csrf()))
+				.andDo(print())
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/"))
-				.andExpect(authenticated().withUsername("kjaehwan89"));
+				.andExpect(authenticated().withUsername("test"));
 		;
 
-		Account account = accountRepository.findByEmail("kjaehwan89@gmail.com");
+		Account account = accountRepository.findByEmail("test@gmail.com");
 
-		assertTrue(accountRepository.existsByEmail("kjaehwan89@gmail.com"));
+		assertTrue(accountRepository.existsByEmail("test@gmail.com"));
 
 		assertNotNull(account);
 		assertNotEquals(account.getPassword(), "12345678");
 		assertNotNull(account.getEmailCheckToken());
 
-		then(emailService).should().send(any(EmailMessage.class));
+		then(emailService).should()
+				.send(any(EmailMessage.class));
 
 	}
 }

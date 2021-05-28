@@ -41,6 +41,9 @@ public class CommentService {
 					.findFirstByPostAndCommentGrpOrderByCommentOdrDesc(post, comment_group);
 			long countByPostAndCommentGrp = lastComment.getCommentOdr() + 1;
 
+			commentForm.setContent("[" + parentComment.getAuthor()
+					.getNickname() + "] " + commentForm.getContent());
+
 			comment = createNewPost(modelMapper.map(commentForm, Comment.class), post,
 					comment_group, countByPostAndCommentGrp, parentComment, account);
 			parentComment.getChildComments()
@@ -67,18 +70,25 @@ public class CommentService {
 		return commentRepository.save(comment);
 	}
 
-	public void removeComment(Account account,  Comment comment) {
+	public void removeComment(Account account, Comment comment) {
 		if (isAuthor(account, comment)) {
 			Post post = comment.getPost();
 
 			Set<Comment> childComments = comment.getChildComments();
+//			if (childComments.size() > 0) {
+//				comment.setContent("Deleted comment.");
+//				commentRepository.save(comment);
+//			} else {
+//				post.removeComment(comment);
+//				commentRepository.delete(comment);
+//			}
 			for (Comment childComment : childComments) {
 				post.removeComment(childComment);
 			}
 			post.removeComment(comment);
 			commentRepository.delete(comment);
 		}
-		
+
 	}
 
 	private boolean isAuthor(Account account, Comment comment) {

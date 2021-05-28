@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
@@ -18,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shareknot.infra.AbstractContainerBase;
 import com.shareknot.infra.MockMvcTest;
 import com.shareknot.modules.account.Account;
 import com.shareknot.modules.account.AccountRepository;
@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @MockMvcTest
 @Slf4j
-class CommentControllerTest {
+class CommentControllerTest extends AbstractContainerBase {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -80,13 +80,14 @@ class CommentControllerTest {
 	@DisplayName("Add a comment")
 	@Test
 	void addComment() throws Exception {
-
 		CommentForm commentForm = new CommentForm();
-		commentForm.setContent("test");
+		commentForm.setContent("1234567890");
+		commentForm.setBoardTitle(board.getTitle());
+		commentForm.setPostId(post.getId());
 
 		int before_size = post.getComments()
 				.size();
-		String url = "/board/lists/freeboard/posts/" + post.getId() + "/add-comment";
+		String url = "/comments/add";
 		mockMvc.perform(post(url).contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(commentForm))
 				.with(csrf()))
@@ -101,7 +102,9 @@ class CommentControllerTest {
 	@Test
 	void addCommentofComment() throws Exception {
 		CommentForm fstCommentForm = new CommentForm();
-		fstCommentForm.setContent("test");
+		fstCommentForm.setContent("==========test1==========");
+		fstCommentForm.setBoardTitle(board.getTitle());
+		fstCommentForm.setPostId(post.getId());
 
 		Account account = withBoardPostFactoryImpl.getPrincipalAccount()
 				.getAccount();
@@ -110,13 +113,16 @@ class CommentControllerTest {
 		commentService.saveComment(board, post, account, fstCommentForm);
 
 		CommentForm sndCommentForm = new CommentForm();
-		sndCommentForm.setContent("test2");
+
+		sndCommentForm.setContent("==========test2==========");
+		sndCommentForm.setBoardTitle(board.getTitle());
+		sndCommentForm.setPostId(post.getId());
 		sndCommentForm.setParentCommentId(saveComment.getId());
 
 		int before_size = post.getComments()
 				.size();
 		log.info("==========================");
-		String url = "/board/lists/freeboard/posts/" + post.getId() + "/add-comment";
+		String url = "/comments/add/";
 		mockMvc.perform(post(url).contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(sndCommentForm))
 				.with(csrf()))
@@ -130,7 +136,7 @@ class CommentControllerTest {
 
 	private void printComments(Post post) {
 		List<Comment> findAll = commentRepository
-				.findByPostOrderByCommentGrpDescCommentOdrDesc(post);
+				.findAllByPostOrderByCommentGrpAscCommentOdrAsc(post);
 		for (Comment comment : findAll) {
 			Comment parentComment = comment.getParentComment();
 			log.info("\nid:{} post:{} grp:{} order:{} parent:{} content:{}", comment.getId(),
@@ -146,7 +152,7 @@ class CommentControllerTest {
 	@Test
 	void deleteComment() throws Exception {
 		CommentForm fstCommentForm = new CommentForm();
-		fstCommentForm.setContent("test");
+		fstCommentForm.setContent("1234567890");
 		Account account = withBoardPostFactoryImpl.getPrincipalAccount()
 				.getAccount();
 
@@ -156,8 +162,8 @@ class CommentControllerTest {
 
 		int before_size = post.getComments()
 				.size();
-		String url = "/board/lists/freeboard/posts/" + post.getId() + "/remove-comment/"
-				+ saveComment.getId();
+		String url = "/comments/remove/" + saveComment.getId();
+		
 		removeComment(url);
 
 		printComments(post);
@@ -177,24 +183,29 @@ class CommentControllerTest {
 		Account account = withBoardPostFactoryImpl.getPrincipalAccount()
 				.getAccount();
 
-		fstCommentForm.setContent("=============1=============");
+		fstCommentForm=createCommentForm("=============1=============",board.getTitle(),post.getId(),null);
 		commentService.saveComment(board, post, account, fstCommentForm);
-		fstCommentForm.setContent("=============2=============");
+
+		fstCommentForm=createCommentForm("=============2=============",board.getTitle(),post.getId(),null);
 		Comment saveComment = commentService.saveComment(board, post, account, fstCommentForm);
-		fstCommentForm.setContent("=============3=============");
+		
+		fstCommentForm=createCommentForm("=============3=============",board.getTitle(),post.getId(),null);
 		commentService.saveComment(board, post, account, fstCommentForm);
-		fstCommentForm.setContent("=============4=============");
+		
+		fstCommentForm=createCommentForm("=============4=============",board.getTitle(),post.getId(),null);
 		commentService.saveComment(board, post, account, fstCommentForm);
 
 		Long parentId = saveComment.getId();
-		sndCommentForm.setParentCommentId(parentId);
-		sndCommentForm.setContent("=============2-1=============");
+		sndCommentForm=createCommentForm("=============2-1=============",board.getTitle(),post.getId(),parentId);
 		commentService.saveComment(board, post, account, sndCommentForm);
-		sndCommentForm.setContent("=============2-2=============");
+		
+		sndCommentForm=createCommentForm("=============2-2=============",board.getTitle(),post.getId(),parentId);
 		Comment subComment = commentService.saveComment(board, post, account, sndCommentForm);
-		sndCommentForm.setContent("=============2-3=============");
+		
+		sndCommentForm=createCommentForm("=============2-3=============",board.getTitle(),post.getId(),parentId);
 		commentService.saveComment(board, post, account, sndCommentForm);
-		fstCommentForm.setContent("=============5=============");
+		
+		fstCommentForm=createCommentForm("=============5=============",board.getTitle(),post.getId(),null);
 		commentService.saveComment(board, post, account, fstCommentForm);
 
 		printComments(post);
@@ -203,16 +214,14 @@ class CommentControllerTest {
 				.size();
 
 		// delete 2-2
-		String url = "/board/lists/freeboard/posts/" + post.getId() + "/remove-comment/"
-				+ subComment.getId();
+		String url = "/comments/remove/" + subComment.getId();
 		removeComment(url);
 		assertTrue(commentRepository.findById(subComment.getId())
 				.isEmpty());
 
 		// delete 2
 		printComments(post);
-		url = "/board/lists/freeboard/posts/" + post.getId() + "/remove-comment/"
-				+ parentId;
+		url = "/comments/remove/" + parentId;
 		removeComment(url);
 //		url = "/board/lists/freeboard/posts/" + post.getId() + "/delete";
 //		mockMvc.perform(post(url).with(csrf()))
@@ -222,6 +231,16 @@ class CommentControllerTest {
 		int after_size = post.getComments()
 				.size();
 		assertTrue(after_size < before_size);
+	}
+
+	private CommentForm createCommentForm(String string, String title, Long id,Long parentId) {
+		CommentForm commentForm = new CommentForm();
+		commentForm.setContent(string);
+		commentForm.setBoardTitle(title);
+		commentForm.setPostId(id);
+		commentForm.setParentCommentId(parentId);
+		
+		return commentForm;
 	}
 
 	private void removeComment(String url) throws Exception {

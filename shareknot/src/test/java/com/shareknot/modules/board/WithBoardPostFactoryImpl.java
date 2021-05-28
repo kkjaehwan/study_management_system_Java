@@ -40,13 +40,20 @@ public class WithBoardPostFactoryImpl implements WithBoardFactory, WithPostFacto
 
 	@Override
 	public Board makeBoard(String board_title) {
-		String nickname = "shareknot";
+		Board board = boardRepository.findByTitle(board_title);
+		if (board == null) {
+			String nickname = "shareknot";
 
-		Account account = createNewAccount(nickname);
+			Account account = accountRepository.findByNickname(nickname);
+			if (account == null) {
+				account = createNewAccount(nickname);
+			}
 
-		BoardForm boardForm = new BoardForm();
-		boardForm.setTitle(board_title);
-		return boardService.createNewBoard(boardForm, account);
+			BoardForm boardForm = new BoardForm();
+			boardForm.setTitle(board_title);
+			board = boardService.createNewBoard(boardForm, account);
+		}
+		return board;
 	}
 
 	private Account createNewAccount(String nickname) {

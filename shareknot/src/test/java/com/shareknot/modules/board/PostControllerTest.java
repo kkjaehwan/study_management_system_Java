@@ -20,13 +20,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shareknot.infra.AbstractContainerBase;
 import com.shareknot.infra.MockMvcTest;
 import com.shareknot.modules.account.AccountRepository;
 import com.shareknot.modules.account.AccountService;
@@ -34,10 +32,9 @@ import com.shareknot.modules.account.WithAccount;
 
 import lombok.extern.slf4j.Slf4j;
 
-
 @MockMvcTest
 @Slf4j
-class PostControllerTest {
+class PostControllerTest extends AbstractContainerBase {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -161,7 +158,7 @@ class PostControllerTest {
 		String url = "/board/lists/freeboard/posts/" + id;
 		mockMvc.perform(get(url))
 				.andDo(print())
-				.andExpect(view().name("post/form"))
+				.andExpect(view().name("post/view"))
 				.andExpect(status().isOk());
 	}
 

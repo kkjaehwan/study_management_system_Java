@@ -16,17 +16,21 @@ import lombok.RequiredArgsConstructor;
 public class WithAccountSecurityContextFactory implements WithSecurityContextFactory<WithAccount> {
 
 	private final AccountService accountService;
+	private final AccountRepository accountRepository;
 
 	@Override
 	public SecurityContext createSecurityContext(WithAccount withAccount) {
 		String nickname=withAccount.value();
 
-        SignUpForm signUpForm = new SignUpForm();
-        signUpForm.setNickname(nickname);
-        signUpForm.setEmail(nickname + "@email.com");
-        signUpForm.setPassword("12345678");
-        accountService.processNewAccount(signUpForm);
-                
+		Account findByNickname = accountRepository.findByNickname(nickname);
+		if (findByNickname == null) {
+			SignUpForm signUpForm = new SignUpForm();
+			signUpForm.setNickname(nickname);
+			signUpForm.setEmail(nickname + "@email.com");
+			signUpForm.setPassword("12345678");
+			accountService.processNewAccount(signUpForm);
+		}
+		
 		UserDetails principal = accountService.loadUserByUsername(nickname);
 		Authentication authentication = new UsernamePasswordAuthenticationToken(principal, principal.getPassword(), principal.getAuthorities());
 		SecurityContext context = SecurityContextHolder.createEmptyContext();

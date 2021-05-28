@@ -12,17 +12,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.shareknot.infra.AbstractContainerBase;
+import com.shareknot.infra.MockMvcTest;
 import com.shareknot.modules.account.AccountRepository;
 import com.shareknot.modules.account.AccountService;
 import com.shareknot.modules.account.form.SignUpForm;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-class MainControllerTest {
+import lombok.extern.slf4j.Slf4j;
+
+@MockMvcTest
+@Slf4j
+class MainControllerTest extends AbstractContainerBase {
 
 	@Autowired
 	MockMvc mockMvc;
@@ -36,10 +38,11 @@ class MainControllerTest {
 	@BeforeEach
 	void beforeEach() {
 		SignUpForm signUpForm = new SignUpForm();
-		signUpForm.setEmail("kjaehwan89@gmail.com");
-		signUpForm.setNickname("kjaehwan89");
+		signUpForm.setEmail("test@gmail.com");
+		signUpForm.setNickname("test");
 		signUpForm.setPassword("12345678");
 		accountService.processNewAccount(signUpForm);
+		
 	}
 
 	@AfterEach
@@ -50,26 +53,31 @@ class MainControllerTest {
 	@DisplayName("login success using email")
 	@Test
 	void login_with_email() throws Exception {
-		mockMvc.perform(
-				post("/login").param("username", "kjaehwan89@gmail.com").param("password", "12345678").with(csrf()))
+		mockMvc.perform(post("/login").param("username", "test@gmail.com")
+				.param("password", "12345678")
+				.with(csrf()))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(redirectedUrl("/"))
-				.andExpect(authenticated().withUsername("kjaehwan89"));
+				.andExpect(authenticated().withUsername("test"));
 	}
 
 	@DisplayName("login success using nickname")
 	@Test
 	void login_with_nickname() throws Exception {
-		mockMvc.perform(post("/login").param("username", "kjaehwan89").param("password", "12345678").with(csrf()))
+		mockMvc.perform(post("/login").param("username", "test")
+				.param("password", "12345678")
+				.with(csrf()))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(redirectedUrl("/"))
-				.andExpect(authenticated().withUsername("kjaehwan89"));
+				.andExpect(authenticated().withUsername("test"));
 	}
 
 	@DisplayName("login fail")
 	@Test
 	void login_fail() throws Exception {
-		mockMvc.perform(post("/login").param("username", "kjaehwan89").param("password", "0000000").with(csrf()))
+		mockMvc.perform(post("/login").param("username", "test")
+				.param("password", "0000000")
+				.with(csrf()))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(redirectedUrl("/login?error"))
 				.andExpect(unauthenticated());

@@ -13,20 +13,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.shareknot.infra.AbstractContainerBase;
 import com.shareknot.infra.MockMvcTest;
 import com.shareknot.modules.account.WithAccount;
 
 import lombok.extern.slf4j.Slf4j;
 
-
 @MockMvcTest
 @Slf4j
-public class BoardControllerTest {
+public class BoardControllerTest extends AbstractContainerBase {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -50,7 +47,7 @@ public class BoardControllerTest {
 		mockMvc.perform(post("/board/new-board").param("title", "freeboard")
 				.with(csrf()))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(redirectedUrl("/board/freeboard"));
+				.andExpect(redirectedUrl("/board/lists/"));
 
 		Board board = boardRepository.findByTitle("freeboard");
 		assertNotNull(board);
@@ -71,17 +68,16 @@ public class BoardControllerTest {
 	@Test
 	void viewBoard_without_login() throws Exception {
 		mockMvc.perform(get("/board/lists"))
-				.andExpect(status().is3xxRedirection())
-				.andExpect(redirectedUrl("http://localhost/login"));
+				.andExpect(status().isOk());
 	}
 
 	@WithAccount("kjaehwan89")
-	@DisplayName("@GetMapping(\"/lists/{title}\") : view a board")
+	@DisplayName("@GetMapping(\"/lists/{title}\") : view a board without auth")
 	@Test
 	void board_detail() throws Exception {
 
 		mockMvc.perform(get("/board/lists/freeboard"))
-				.andExpect(view().name("board/board"));
+				.andExpect(view().name("error"));
 	}
 
 	@WithAccount("kjaehwan89")
@@ -119,7 +115,7 @@ public class BoardControllerTest {
 				.with(csrf()))
 				.andDo(print())
 				.andExpect(status().is3xxRedirection())
-				.andExpect(redirectedUrl("/board/lists/freeboard2"));
+				.andExpect(redirectedUrl("/board/lists/"));
 
 		Board modifiedboard = boardRepository.findByTitle("freeboard2");
 		assertNotNull(modifiedboard);

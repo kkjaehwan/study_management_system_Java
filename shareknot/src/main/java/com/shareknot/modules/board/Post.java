@@ -2,6 +2,7 @@ package com.shareknot.modules.board;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -50,12 +51,12 @@ public class Post {
 
 	private long viewCount = 0;
 
-	private long commentCount=0;
+	private long commentCount = 0;
 
 	public boolean isWriitenBy(Account account) {
 		return this.author.equals(account);
 	}
-	
+
 	public boolean isAuthor(UserAccount userAccount) {
 		return this.author.equals(userAccount.getAccount());
 	}
@@ -67,6 +68,13 @@ public class Post {
 	}
 
 	public void removeComment(Comment comment) {
+		Set<Comment> childComments = comment.getChildComments();
+		if (childComments.size() > 0) {
+			for (Iterator iterator = childComments.iterator(); iterator.hasNext();) {
+				Comment subComment = (Comment) iterator.next();
+				removeComment(subComment);
+			}
+		}
 		if (comments.contains(comment)) {
 			comments.remove(comment);
 			commentCount--;
@@ -76,6 +84,5 @@ public class Post {
 	public void addViewCount() {
 		this.viewCount++;
 	}
-
 
 }

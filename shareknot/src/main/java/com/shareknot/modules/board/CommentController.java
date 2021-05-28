@@ -37,7 +37,7 @@ public class CommentController {
 	public String getComments(@CurrentAccount Account account,
 			@PathVariable("id") Post post, Model model) {
 		model.addAttribute("commentList",
-				commentRepository.findAllByPostOrderByCommentGrpDescCommentOdrDesc(post));
+				commentRepository.findAllByPostOrderByCommentGrpAscCommentOdrAsc(post));
 
 		return "fragment::comments-list";
 	}
