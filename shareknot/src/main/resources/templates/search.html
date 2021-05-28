@@ -26,7 +26,7 @@
 				<nav>
 					<ul class="pagination justify-content-center">
 						<li class="page-item" th:classappend="${!partyPage.hasPrevious()}? disabled"><a th:href="@{'/search/party?keyword=' + ${keyword} + '&sort=' + ${sortProperty} + ',desc&page=' + ${partyPage.getNumber() - 1}}" class="page-link" tabindex="-1" aria-disabled="true"> Previous </a></li>
-						<li class="page-item" th:classappend="${i == partyPage.getNumber()}? active" th:each="i: ${#numbers.sequence(0, partyPage.getTotalPages() - 1)}"><a th:href="@{'/search/party?keyword=' + ${keyword} + '&sort=' + ${sortProperty} + ',desc&page=' + ${i}}" class="page-link" href="#" th:text="${i + 1}">1</a></li>
+						<li class="page-item" th:classappend="${i == partyPage.getNumber()}? active" th:each="i: ${#numbers.sequence(0, partyPage.getTotalPages() - 1)}" th:if="${i>-1}")><a th:href="@{'/search/party?keyword=' + ${keyword} + '&sort=' + ${sortProperty} + ',desc&page=' + ${i}}" class="page-link" href="#" th:text="${i + 1}">1</a></li>
 						<li class="page-item" th:classappend="${!partyPage.hasNext()}? disabled"><a th:href="@{'/search/party?keyword=' + ${keyword} + '&sort=' + ${sortProperty} + ',desc&page=' + ${partyPage.getNumber() + 1}}" class="page-link"> Next </a></li>
 					</ul>
 				</nav>

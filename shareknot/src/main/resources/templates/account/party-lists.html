@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment.html::head"></head>
+<body class="bg-light">
+	<div th:replace="fragment.html::main-navi"></div>
+	<div class="alert alert-warning" role="alert" th:if="${account!=null && !account.emailVerified}">
+		if you want to finish sign-up,
+		<a href="#" th:href="@{/check-email}" class="alert-link">check your email.</a>
+	</div>
+	<div class="container">
+		<div th:replace="fragment.html::page-title(title='Parties')"></div>
+		<div class="list-group mb-2" id="tab" role="tablist" aria-orientation="vertical">
+			<a class="list-group-item list-group-item-action active" id="list-management-tab" data-toggle="pill" href="#list-management" role="tab" aria-controls="list-management" aria-selected="true">Parties under management</a>
+			<a class="list-group-item list-group-item-action" id="list-participate-tab" data-toggle="pill" href="#list-participate" role="tab" aria-controls="list-participate" aria-selected="false">Participating parties</a>
+		</div>
+
+		<div class="tab-content" id="nav-tabContent">
+			<div class="tab-pane fade show active" id="list-management" role="tabpanel" aria-labelledby="list-management-tab">
+				<div class="col-sm-12">
+					<div class="row justify-content-center">
+						<div th:replace="fragment.html::party-list (partyList=${partyManagerOf})"></div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="list-participate" role="tabpanel" aria-labelledby="list-participate-tab">
+				<div class="col-sm-12">
+					<div class="row justify-content-center">
+						<div th:replace="fragment.html::party-list (partyList=${partyMemberOf})"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:replace="fragment.html::footer"></div>
+	<div th:replace="fragment.html::date-time"></div>
+</body>
+</html>

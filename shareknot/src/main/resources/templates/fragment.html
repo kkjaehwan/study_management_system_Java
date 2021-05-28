@@ -66,14 +66,14 @@ table th {
 		<span class="navbar-toggler-icon"></span>
 	</button>
 	<div class="collapse navbar-collapse flex-row-reverse" id="navbarSupportedContent">
-		<ul class="navbar-nav  ml-auto">
+		<ul class="navbar-nav ml-auto  text-right">
 			<li class="nav-item">
 				<form th:action="@{/search/party}" class="form-inline" method="get">
 					<input class="form-control mr-sm-2" name="keyword" type="search" placeholder="Search Party" aria-label="Search" />
 				</form>
 			</li>
 			<li class="nav-item"><a class="nav-link" th:href="@{/board/lists}">Message Boards</a></li>
-			<li class="nav-item"><a class="nav-link" th:href="@{/ownner-profile}">Developer Profile</a></li>
+			<li class="nav-item"><a class="nav-link" th:href="@{/ownner-profile}">Developer's Profile</a></li>
 			<li class="nav-item" sec:authorize="!isAuthenticated()"><a class="nav-link" th:href="@{/login}">Log-in</a></li>
 			<li class="nav-item" sec:authorize="!isAuthenticated()"><a class="nav-link" th:href="@{/sign-up}">Sign-up</a></li>
 			<li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link btn-outline-primary" th:href="@{/new-party}">
@@ -86,12 +86,12 @@ table th {
 					<svg th:if="${#strings.isEmpty(account?.profileImage)}" th:data-jdenticon-value="${#authentication.name}" width="24" height="24" class="rounded border bg-light"></svg>
 					<img th:if="${!#strings.isEmpty(account?.profileImage)}" th:src="${account.profileImage}" width="24" height="24" class="rounded border" />
 				</a>
-				<div class="dropdown-menu dropdown-menu-sm-right" aria-labelledby="userDropdown">
+				<div class="dropdown-menu dropdown-menu-sm-right  text-right" aria-labelledby="userDropdown">
 					<h6 class="dropdown-header">
 						<span sec:authentication="name">Username</span>
 					</h6>
 					<a class="dropdown-item" th:href="@{'/profile/' + ${#authentication.name}}">profile</a>
-					<a class="dropdown-item">groups</a>
+					<a class="dropdown-item" th:href="@{'/party'}">parties</a>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="#" th:href="@{'/settings/profile'}">configuration</a>
 					<form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">
@@ -111,7 +111,7 @@ table th {
 <!-- Footer End-->
 
 <!-- Massage Box Start-->
-<div th:fragment="messageBox" th:if="${message}" class="alert alert-info alert-dismissible text-center mt-3" role="alert">
+<div th:fragment="messageBox" th:if="${message}" class="alert alert-info alert-dismissible text-center fade show mt-3" role="alert">
 	<span th:text="${message}">success</span>
 	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 		<span aria-hidden="true">x</span>
@@ -202,8 +202,8 @@ table th {
 	<div class="row">
 		<div class="col-md-4" th:each="party: ${partyList}">
 			<div class="card mb-4 shadow-sm">
-				<svg th:if="${#strings.isEmpty(party.image)}" th:data-jdenticon-value="${party.title}" class="card-img-top" height="45" th:alt="${party.title}"></svg>
-				<img th:if="${!#strings.isEmpty(party.image)}" th:src="${member?.profileImage}" height="45" class="card-img-top" th:alt="${party.title}" />
+				<svg th:if="${party.useBanner==false or #strings.isEmpty(party.image)}" th:data-jdenticon-value="${party.title}" class="card-img-top" height="45" th:alt="${party.title}"></svg>
+				<img th:if="${party.useBanner==true and !#strings.isEmpty(party.image)}" th:src="${party.image}" height="45" class="card-img-top" th:alt="${party.title}" />
 				<div class="card-body">
 					<a th:href="@{'/party/' + ${party.path}}" class="text-decoration-none">
 						<h5 class="card-title context" th:text="${party.title}"></h5>
@@ -243,6 +243,9 @@ table th {
 	
 	
 	
+	
+	
+	
     (function () {
         'use strict';
 
@@ -266,11 +269,17 @@ table th {
 
 
 
+
+
+
 </script>
 <!-- form-validation End-->
 <!-- editor-script start-->
 <div th:fragment="editor-script">
 	<script src="/node_modules/summernote/dist/summernote-bs4.min.js"></script> <script type="application/javascript">
+		
+		
+		
 		
 		
 		
@@ -287,48 +296,58 @@ table th {
 	
 	
 	
+	
+	
+	
 	</script>
 </div>
 <!-- editor-script End-->
 
 <!-- party-info Start-->
 <div th:fragment="party-info">
-	<div class="row pt-4 text-left justify-content-center bg-light">
-		<div class="col-6">
+	<div class="d-flex">
+		<div class="flex-grow-1 pt-3 text-left mt-3">
 			<a href="#" class="text-decoration-none" th:href="@{'/party/' + ${party.path}}">
-				<span class="h2" th:text="${party.title}">Name of party</span>
+				<span class="h3" th:text="${party.title}">Name of party</span>
 			</a>
 		</div>
-		<div class="col-4 text-right justify-content-end">
-			<span th:if="${party.published}" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Party Search Exposure Open">
-				<button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>Searching</button>
-			</span> <span th:if="${party.closed}" class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Party Search Exposure Closed">
-				<button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>CLOSED</button>
-			</span> <span th:if="${!party.recruiting}" class="d-inline-block ml-1" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Not recruiting party members">
-				<button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>OFF</button>
-			</span> <span th:if="${party.recruiting}" class="d-inline-block ml-1" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="recruiting party members">
-				<button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>Recruiting</button>
-			</span> <span sec:authorize="isAuthenticated()" th:if="${party.isJoinable(#authentication.principal)}" class="btn-group" role="group" aria-label="Basic example">
-				<form action="#" th:action="@{'/party/' + ${party.path} + '/join'}" method="post">
-					<button class="btn btn-primary" type="submit">Join Party</button>
-				</form> <a class="btn btn-outline-primary" th:href="@{'/party/' + ${party.path} + '/members'}" th:text="${party.members.size()}">1</a>
-			</span> <span sec:authorize="isAuthenticated()" th:if="${party.isMember(#authentication.principal)}" class="btn-group" role="group">
-				<form action="#" th:action="@{'/party/' + ${party.path} + '/leave'}" method="post">
-					<button class="btn btn-outline-warning" type="submit">Leave Party</button>
-				</form> <a class="btn btn-outline-primary" th:href="@{'/party/' + ${party.path} + '/members'}" th:text="${party.members.size()}">1</a>
-			</span> <span sec:authorize="isAuthenticated()" th:if="${party.isManager(#authentication.principal)}"> <a class="btn btn-outline-primary" th:href="@{'/party/' + ${party.path} + '/new-event'}">
-					<i class="fa fa-plus"></i> Create Meeting
+		<div class="text-right">
+			<div>
+				<span th:if="${party.published}" class="font-weight-light text-monospace badge badge-primary" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Party Search Exposure Open"> <span class="text-white" style="pointer-events: none;" disabled>Searching</span>
+				</span> <span th:if="${party.closed}" class="font-weight-light text-monospace badge badge-primary" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Party Search Exposure Closed"> <span class="text-white" style="pointer-events: none;" type="button" disabled>CLOSED</span>
+				</span> <span th:if="${!party.recruiting}" class="font-weight-light text-monospace badge badge-primary" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Not recruiting party members"> <span class="text-white" style="pointer-events: none;" type="button" disabled>OFF</span>
+				</span> <span th:if="${party.recruiting}" class="font-weight-light text-monospace badge badge-primary" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="recruiting party members"> <span class="text-white" style="pointer-events: none;" type="button" disabled>Recruiting</span>
+				</span>
+
+				<a th:href="@{'/party/' + ${party.path} + '/members'}">
+					<small class="font-weight-light text-monospace badge badge-primary">
+						<i class="fa fa-user-circle"></i> <span th:text="${party.memberCount+'명'}"></span>
+					</small>
 				</a>
-			</span>
+			</div>
+			<div>
+				<span sec:authorize="isAuthenticated()" th:if="${party.isJoinable(#authentication.principal)}" class="btn-group" role="group" aria-label="Basic example">
+					<form action="#" th:action="@{'/party/' + ${party.path} + '/join'}" method="post">
+						<button class="btn btn-primary btn-sm m-1" type="submit">Join Party</button>
+					</form>
+				</span> <span sec:authorize="isAuthenticated()" th:if="${party.isMember(#authentication.principal)}" class="btn-group" role="group">
+					<form action="#" th:action="@{'/party/' + ${party.path} + '/leave'}" method="post">
+						<button class="btn btn-danger btn-sm m-1" type="submit">Leave Party</button>
+					</form>
+				</span> <span sec:authorize="isAuthenticated()" th:if="${party.isManager(#authentication.principal)}"> <a class="btn btn-outline-primary btn-sm m-1" th:href="@{'/party/' + ${party.path} + '/new-event'}">
+						<i class="fa fa-plus"></i> Create Meeting
+					</a>
+				</span>
+			</div>
 		</div>
 	</div>
 	<div class="row justify-content-center bg-light">
-		<div class="col-10">
+		<div class="col-12">
 			<p class="lead" th:text="${party.shortDescription}"></p>
 		</div>
 	</div>
 	<div class="row justify-content-center bg-light">
-		<div class="col-10">
+		<div class="col-12">
 			<p>
 				<span th:each="tag: ${party.tags}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3"> <a th:href="@{'/search/tag/' + ${tag.title}}" class="text-decoration-none text-white">
 						<i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
@@ -344,9 +363,9 @@ table th {
 <!-- party-info End-->
 <!-- party-menu Start-->
 <div th:fragment="party-menu (partyMenu)" class="row px-3 justify-content-center bg-light">
-	<nav class="col-10 nav nav-tabs">
+	<nav class="col-12 nav nav-tabs">
 		<a class="nav-item nav-link" href="#" th:classappend="${partyMenu == 'info'}? active" th:href="@{'/party/' + ${party.path}}">
-			<i class="fa fa-info-circle"></i> introduction
+			<i class="fa fa-info-circle"></i> Introduction
 		</a>
 		<a class="nav-item nav-link" href="#" th:classappend="${partyMenu == 'members'}? active" th:href="@{'/party/' + ${party.path} + '/members'}">
 			<i class="fa fa-user"></i> Members
@@ -362,7 +381,7 @@ table th {
 <!-- party-menu end-->
 <!-- member-list Start-->
 <div th:fragment="member-list (members, isManager)" class="row px-3 justify-content-center">
-	<ul class="list-unstyled col-10">
+	<ul class="list-unstyled col-12">
 		<li class="media mt-3" th:each="member: ${members}"><svg th:if="${#strings.isEmpty(member?.profileImage)}" th:data-jdenticon-value="${member.nickname}" width="64" height="64" class="rounded border bg-light mr-3"></svg> <img th:if="${!#strings.isEmpty(member?.profileImage)}" th:src="${member?.profileImage}" width="64" height="64" class="rounded border mr-3" />
 			<div class="media-body">
 				<h5 class="mt-0 mb-1">
@@ -377,6 +396,9 @@ table th {
 <script th:fragment="ajax-csrf-header" type="application/javascript" th:inline="javascript">
 	
 	
+	
+	
+	
 	$(function() {
         var csrfToken = /*[[${_csrf.token}]]*/ null;
         var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
@@ -386,11 +408,17 @@ table th {
     });
 
 
+
+
+
 </script>
 <!-- ajax-csrf-header end-->
 <!-- update-tags start -->
 <div th:fragment="update-tags (baseUrl)">
 	<script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script> <script type="application/javascript">
+		
+		
+		
 		
 		
 		
@@ -442,10 +470,16 @@ table th {
 	
 	
 	
+	
+	
+	
 	</script>
 </div>
 <!-- update-tags end-->
 <script th:fragment="ajax-comments(boardTitle, postId, addCommentFormId, loadTagetId)" type="application/javascript">
+	
+	
+	
 	$(document).ready(function() {
 		function commentAddSubmit(){
 			$('.comment-add').off('submit');
@@ -529,6 +563,9 @@ table th {
 	});
 
 
+
+
+
 </script>
 <div th:fragment="comment-add (commentAddId)">
 	<form sec:authorize="isAuthenticated()" th:id="${commentAddId}" class="col-12 pt-3 needs-validation comment-add" action="#" th:action="@{'/comments/add'}" th:object="${commentForm}" method="post" novalidate>
@@ -584,6 +621,9 @@ table th {
 	<script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script> <script type="application/javascript">
 		
 		
+		
+		
+		
     $(function() {
         function zoneRequest(url, zoneName) {
             $.ajax({
@@ -628,11 +668,17 @@ table th {
     });
 	
 	
+	
+	
+	
 	</script>
 </div>
 <!-- update-zones end -->
 <!-- tooltip Start-->
 <script th:fragment="tooltip" type="application/javascript">
+	
+	
+	
 	
 	
 	
@@ -644,31 +690,45 @@ table th {
 
 
 
+
+
+
 </script>
 <!-- tooltip End-->
+
+<div th:fragment="page-title(title)" class="h3 col-12 row pt-3 text-left mt-3">
+	<span th:text="${title}">Profile</span>
+</div>
+
 <!-- party-settings-menu (currentMenu) Start-->
-<div th:fragment="party-settings-menu (currentMenu)" class="list-group">
-	<a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'description'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/settings/description'}">Introduction</a>
-	<a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'banner'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/settings/banner'}">Banner Image</a>
-	<a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/settings/tags'}">Party tags</a>
-	<a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/settings/zones'}">Activity Zones</a>
-	<a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'party'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/settings/party'}">Party</a>
+<div th:fragment="party-settings-menu (currentMenu)">
+	<ul class="nav mb-3">
+		<li class="nav-item"><a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'description'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/settings/description'}">Introduction</a></li>
+		<li class="nav-item"><a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'banner'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/settings/banner'}">Banner Image</a></li>
+		<li class="nav-item"><a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/settings/tags'}">Party tags</a></li>
+		<li class="nav-item"><a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/settings/zones'}">Activity Zones</a></li>
+		<li class="nav-item"><a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'party'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/settings/party'}">Party</a></li>
+	</ul>
 </div>
 <!-- party-settings-menu (currentMenu) End-->
 
 <!-- settings-menu (currentMenu) Start-->
-<div th:fragment="settings-menu (currentMenu)" class="list-group">
-	<a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" href="#" th:href="@{/settings/profile}">Profile</a>
-	<a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active" href="#" th:href="@{/settings/password}">Password</a>
-	<a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notifications'}? active" href="#" th:href="@{/settings/notifications}">Notification</a>
-	<a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'}? active" href="#" th:href="@{/settings/tags}">Tags of interest</a>
-	<a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'}? active" href="#" th:href="@{/settings/zones}">Zone</a>
-	<a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'account'}? active" href="#" th:href="@{/settings/account}">Account</a>
+<div th:fragment="settings-menu (currentMenu)">
+	<ul class="nav mb-3">
+		<li class="nav-item"><a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" href="#" th:href="@{/settings/profile}">Profile</a></li>
+		<li class="nav-item"><a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active" href="#" th:href="@{/settings/password}">Password</a></li>
+		<li class="nav-item"><a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notifications'}? active" href="#" th:href="@{/settings/notifications}">Notification</a></li>
+		<li class="nav-item"><a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'}? active" href="#" th:href="@{/settings/tags}">Tags of interest</a></li>
+		<li class="nav-item"><a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'}? active" href="#" th:href="@{/settings/zones}">Zone</a></li>
+		<li class="nav-item"><a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'account'}? active" href="#" th:href="@{/settings/account}">Account</a></li>
 </div>
 <!-- settings-menu (currentMenu) End-->
 
 <div th:fragment="date-time">
 	<script src="/node_modules/moment/min/moment-with-locales.min.js"></script> <script type="application/javascript">
+		
+		
+		
 		
 		
 		
@@ -697,6 +757,9 @@ table th {
                 return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('LLLL');
             });
         })
+	
+	
+	
 	
 	
 	

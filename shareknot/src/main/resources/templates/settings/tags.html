@@ -6,33 +6,26 @@
 	<div th:replace="fragment.html::main-navi"></div>
 	<!-- Start -->
 	<div class="container">
-		<div class="row mt-5 justify-content-center">
-			<div class="col-10">
-				<div th:if="${message}" class="alert alert-info alert-dismissible fade show mt-3" role="alert">
-					<span th:text="${message}">success</span>
-					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-						<span aria-hidden="true">x</span>
-					</button>
-				</div>
-				<div class="row">
-					<h2 class="col-sm-12">Change Tags</h2>
-				</div>
-
-				<div class="row mt-3">
-					<div class="col-sm-2">
-						<div th:replace="fragment.html::settings-menu(currentMenu='tags')"></div>
-					</div>
-					<div class="col-10">
-						<div class="alert alert-info" role="alert">Please enter a tag you would like to participate in. You can be notified when a tag of the subject occurs. Please enter a tag and a comma (,) or enter.</div>
-
-						<div id="whitelist" th:text="${whitelist}" hidden></div>
-						<input id="tags" type="text" name="tags" th:value="${#strings.listJoin(tags,',')}" class="tagify-outside" aria-describedby="tagHelp">
-					</div>
-
+		<div th:replace="fragment.html::page-title(title=${account.nickname})"></div>
+		<div th:replace="fragment.html::messageBox"></div>
+		<div class="col-12">
+			<div class="row">
+				<div class="col-12">
+					<div th:replace="fragment.html::settings-menu(currentMenu='tags')"></div>
 				</div>
 			</div>
+			<div class="row">
+				<div class="col-12">
+					<div class="alert alert-info" role="alert">Please enter a tag you would like to participate in. You can be notified when a tag of the subject occurs. Please enter a tag and a comma (,) or enter.</div>
+
+					<div id="whitelist" th:text="${whitelist}" hidden></div>
+					<input id="tags" type="text" name="tags" th:value="${#strings.listJoin(tags,',')}" class="tagify-outside" aria-describedby="tagHelp">
+				</div>
+
+			</div>
 		</div>
-		<div th:replace="fragment.html::footer"></div>
+	</div>
+	<div th:replace="fragment.html::footer"></div>
 	</div>
 	<!-- End -->
 

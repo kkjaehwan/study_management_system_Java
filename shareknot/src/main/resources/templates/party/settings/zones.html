@@ -10,15 +10,14 @@
 		<div th:replace="fragment.html::party-info"></div>
 		<div th:replace="fragment.html::party-menu(partyMenu='settings')"></div>
 
-		<div class="row mt-3 justify-content-center">
-			<div class="col-2">
+		<div class="row">
+			<div class="col-12">
 				<div th:replace="fragment.html::party-settings-menu(currentMenu='zones')"></div>
 			</div>
-			<div class="col-8">
+		</div>
+		<div class="row">
+			<div class="col-12">
 				<div th:replace="fragment.html::messageBox"></div>
-				<div class="row">
-					<h2 class="col-sm-12">Areas of Activity</h2>
-				</div>
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="alert alert-info" role="alert">Register the area where you usually activate. You can select only regions that are registered on the system.</div>

@@ -4,26 +4,15 @@
 <body class="bg-light">
 	<div th:replace="fragment.html::main-navi"></div>
 	<div class="alert alert-warning" role="alert" th:if="${account!=null && !account.emailVerified}">
-		if you want to finish sign-up, <a href="#" th:href="@{/check-email}" class="alert-link">check your email.</a>
+		if you want to finish sign-up,
+		<a href="#" th:href="@{/check-email}" class="alert-link">check your email.</a>
 	</div>
 	<div class="container mt-4">
 		<div class="row">
-			<div class="col-md-2">
-				<h5 class="font-weight-light">Party Topics of Interest</h5>
-				<ul class="list-group list-group-flush">
-					<li class="list-group-item" th:each="tag: ${account.tags}"><i class="fa fa-tag"></i> <span th:text="${tag.title}"></span></li>
-					<li class="list-group-item" th:if="${account.tags.size() == 0}">Register <a th:href="@{/settings/tags}" class="btn-text"> a party topic</a> of interest.
-					</li>
-				</ul>
-				<h5 class="mt-3 font-weight-light">Key areas of activity</h5>
-				<ul class="list-group list-group-flush">
-					<li class="list-group-item" th:each="zone: ${account.zones}"><i class="fa fa-globe"></i> <span th:text="${zone.getLocalNameOfCity()}">Zone</span></li>
-					<li class="list-group-item" th:if="${account.zones.size() == 0}">Register <a th:href="@{/settings/zones}" class="btn-text">a key activity area</a></li>
-				</ul>
-			</div>
-			<div class="col-md-7">
-				<h5 th:if="${#lists.isEmpty(enrolmentList)}" class="font-weight-light">There are no meetings to attend.</h5>
-				<h5 th:if="${!#lists.isEmpty(enrolmentList)}" class="font-weight-light">Meeting to attend</h5>
+			<div class="col-md-10">
+
+				<div th:replace="fragment.html::page-title(title='Meetings')"></div>
+				<span th:if="${#lists.isEmpty(enrolmentList)}" class="font-weight-light">There are no meetings to attend.</span> <span th:if="${!#lists.isEmpty(enrolmentList)}" class="font-weight-light">Meeting to attend</span>
 				<div class="row row-cols-1 row-cols-md-2" th:if="${!#lists.isEmpty(enrolmentList)}">
 					<div class="col mb-4" th:each="enrolment: ${enrolmentList}">
 						<div class="card">
@@ -34,28 +23,59 @@
 									<span> <i class="fa fa-calendar-o"></i> <span class="calendar" th:text="${enrolment.event.startDateTime}">Last updated 3 mins ago</span>
 									</span>
 								</p>
-								<a th:href="@{'/party/' + ${enrolment.event.party.path} + '/events/' + ${enrolment.event.id}}" class="card-link">See the meeting</a> <a th:href="@{'/party/' + ${enrolment.event.party.path}}" class="card-link">See the party</a>
+								<a th:href="@{'/party/' + ${enrolment.event.party.path} + '/events/' + ${enrolment.event.id}}" class="card-link">See the meeting</a>
+								<a th:href="@{'/party/' + ${enrolment.event.party.path}}" class="card-link">See the party</a>
 							</div>
 						</div>
 					</div>
 				</div>
-				<h5 class="font-weight-light mt-3" th:if="${#lists.isEmpty(partyList)}">There are no related parties.</h5>
-				<h5 class="font-weight-light mt-3" th:if="${!#lists.isEmpty(partyList)}">Topic Party of Interest in Key Activity Areas</h5>
+				<div class="h3 col-12 row  text-left">
+					<span>Parties of interest</span>
+				</div>
+				<span class="font-weight-light mt-3" th:if="${#lists.isEmpty(partyList)}">There is no party of interest.</span> <span class="font-weight-light mt-3" th:if="${!#lists.isEmpty(partyList)}">It's parties that might interest you.</span>
 				<div class="row justify-content-center">
 					<div th:replace="fragment.html::party-list (partyList=${partyList})"></div>
 				</div>
 			</div>
-			<div class="col-md-3">
-				<h5 class="font-weight-light" th:if="${#lists.isEmpty(partyManagerOf)}">There are no parties under management.</h5>
-				<h5 class="font-weight-light" th:if="${!#lists.isEmpty(partyManagerOf)}">Party in Administration</h5>
-				<div class="list-group" th:if="${!#lists.isEmpty(partyManagerOf)}">
-					<a href="#" th:href="@{'/party/' + ${party.path}}" th:text="${party.title}" class="list-group-item list-group-item-action" th:each="party: ${partyManagerOf}"> Party title </a>
+			<div class="col-md-2">
+				<div class="card" style="width: 18rem;">
+					<div class="card-body">
+						<h5 class="card-title">Party Topics of Interest</h5>
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item" th:each="tag: ${account.tags}"><i class="fa fa-tag"></i> <span th:text="${tag.title}"></span></li>
+							<li class="list-group-item" th:if="${account.tags.size() == 0}">Register <a th:href="@{/settings/tags}" class="btn-text"> a party topic</a> of interest.
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="card" style="width: 18rem;">
+					<div class="card-body">
+						<h5 class="card-title">Key areas of activity</h5>
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item" th:each="zone: ${account.zones}"><i class="fa fa-globe"></i> <span th:text="${zone.getLocalNameOfCity()}">Zone</span></li>
+							<li class="list-group-item" th:if="${account.zones.size() == 0}">Register <a th:href="@{/settings/zones}" class="btn-text">a key activity area</a></li>
+						</ul>
+					</div>
 				</div>
 
-				<h5 class="font-weight-light mt-3" th:if="${#lists.isEmpty(partyMemberOf)}">No party is participating.</h5>
-				<h5 class="font-weight-light mt-3" th:if="${!#lists.isEmpty(partyMemberOf)}">Participating parties</h5>
-				<div class="list-group" th:if="${!#lists.isEmpty(partyMemberOf)}">
-					<a href="#" th:href="@{'/party/' + ${party.path}}" th:text="${party.title}" class="list-group-item list-group-item-action" th:each="party: ${partyManagerOf}"> Party title </a>
+				<div class="card" style="width: 18rem;">
+					<div class="card-body">
+						<h5 class="font-weight-light" th:if="${#lists.isEmpty(partyManagerOf)}">There are no parties under management.</h5>
+						<h5 class="font-weight-light" th:if="${!#lists.isEmpty(partyManagerOf)}">Parties under management</h5>
+						<div class="list-group" th:if="${!#lists.isEmpty(partyManagerOf)}">
+							<a href="#" th:href="@{'/party/' + ${party.path}}" th:text="${party.title}" class="list-group-item list-group-item-action" th:each="party: ${partyManagerOf}"> Party title </a>
+						</div>
+					</div>
+				</div>
+
+				<div class="card" style="width: 18rem;">
+					<div class="card-body">
+						<h5 class="font-weight-light mt-3" th:if="${#lists.isEmpty(partyMemberOf)}">There are no participating party.</h5>
+						<h5 class="font-weight-light mt-3" th:if="${!#lists.isEmpty(partyMemberOf)}">Participating parties</h5>
+						<div class="list-group" th:if="${!#lists.isEmpty(partyMemberOf)}">
+							<a href="#" th:href="@{'/party/' + ${party.path}}" th:text="${party.title}" class="list-group-item list-group-item-action" th:each="party: ${partyManagerOf}"> Party title </a>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

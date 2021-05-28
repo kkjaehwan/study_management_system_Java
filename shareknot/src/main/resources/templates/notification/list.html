@@ -4,21 +4,27 @@
 <body class="bg-light">
 	<nav th:replace="fragment.html::main-navi"></nav>
 	<div class="container">
-		<div class="row py-5 text-center">
-			<div class="col-3">
+		<div th:replace="fragment.html::page-title(title=Notifications)"></div>
+		<div class="row">
+			<div class="col-12">
 				<ul class="list-group">
-					<a href="#" th:href="@{/notifications}" th:classappend="${isNew}? active" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"> Unread Notifications <span th:text="${numberOfNotChecked}">3</span>
+					<a href="#" th:href="@{/notifications}" th:classappend="${isNew}? active" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+						Unread Notifications <span th:text="${numberOfNotChecked}">3</span>
 					</a>
-					<a href="#" th:href="@{/notifications/old}" th:classappend="${!isNew}? active" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"> Read Notifications <span th:text="${numberOfChecked}">0</span>
+					<a href="#" th:href="@{/notifications/old}" th:classappend="${!isNew}? active" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+						Read Notifications <span th:text="${numberOfChecked}">0</span>
 					</a>
 				</ul>
 
 				<ul class="list-group mt-4">
-					<a href="#" th:if="${newPartyNotifications.size() > 0}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"> New Party Notification <span th:text="${newPartyNotifications.size()}">3</span>
+					<a href="#" th:if="${newPartyNotifications.size() > 0}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+						New Party Notification <span th:text="${newPartyNotifications.size()}">3</span>
 					</a>
-					<a href="#" th:if="${eventEnrollmentNotifications.size() > 0}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"> Meeting Entry Notification <span th:text="${eventEnrollmentNotifications.size()}">0</span>
+					<a href="#" th:if="${eventEnrollmentNotifications.size() > 0}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+						Meeting Entry Notification <span th:text="${eventEnrollmentNotifications.size()}">0</span>
 					</a>
-					<a href="#" th:if="${watchingPartyNotifications.size() > 0}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"> Party Notifications of Interest <span th:text="${watchingPartyNotifications.size()}">0</span>
+					<a href="#" th:if="${watchingPartyNotifications.size() > 0}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+						Party Notifications of Interest <span th:text="${watchingPartyNotifications.size()}">0</span>
 					</a>
 				</ul>
 
@@ -29,7 +35,9 @@
 					</form>
 				</ul>
 			</div>
-			<div class="col-9">
+		</div>
+		<div class="row">
+			<div class="col-12">
 				<div class="card" th:if="${notifications.size() == 0}">
 					<div class="card-header">There are no notifications.</div>
 				</div>

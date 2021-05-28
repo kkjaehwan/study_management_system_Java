@@ -179,7 +179,7 @@ public class Party {
 
 	public void removeMember(Account account) {
 		this.getMembers().remove(account);
-		this.memberCount++;
+		this.memberCount--;
 	}
 
 }

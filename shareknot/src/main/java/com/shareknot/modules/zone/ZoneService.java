@@ -29,13 +29,13 @@ public class ZoneService {
 	@PostConstruct
 	// 빈 초기화 후 실행
 	public void initZoneData() throws IOException, URISyntaxException {
-//		if (zoneRepository.count() == 0) {
-//			List<Zone> zonesKr = extractZone("zones_kr.csv");
-//			zoneRepository.saveAll(zonesKr);
-//
-//			List<Zone> zonesCa = extractZone("zones_ca.csv");
-//			zoneRepository.saveAll(zonesCa);
-//		}
+		if (zoneRepository.count() == 0) {
+			List<Zone> zonesKr = extractZone("zones_kr.csv");
+			zoneRepository.saveAll(zonesKr);
+
+			List<Zone> zonesCa = extractZone("zones_ca.csv");
+			zoneRepository.saveAll(zonesCa);
+		}
 
 	}
 

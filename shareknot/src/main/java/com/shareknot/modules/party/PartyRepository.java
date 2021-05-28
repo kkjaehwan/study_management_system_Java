@@ -41,13 +41,19 @@ public interface PartyRepository extends JpaRepository<Party, Long>, PartyReposi
 
 	@EntityGraph(attributePaths = { "members", "managers" })
 	Party findStudyWithManagersAndMemebersById(Long id);
-	
-    @EntityGraph(attributePaths = {"zones", "tags"})
-	List<Party> findFirst9ByPublishedAndClosedOrderByPublishedDateTimeDesc(boolean published, boolean closed);
 
-    List<Party> findAllByManagersContainingOrderByPublishedDateTimeDesc(Account account);
+	@EntityGraph(attributePaths = { "zones", "tags" })
+	List<Party> findFirst9ByPublishedAndClosedOrderByPublishedDateTimeDesc(boolean published,
+			boolean closed);
 
-    List<Party> findFirst5ByMembersContainingAndClosedOrderByPublishedDateTimeDesc(Account account, boolean closed);
+	List<Party> findFirst5ByMembersContainingAndClosedOrderByPublishedDateTimeDesc(Account account,
+			boolean closed);
 
+	List<Party> findFirst5ByManagersContainingOrderByPublishedDateTimeDesc(Account account);
+
+	List<Party> findAllByManagersContainingOrderByPublishedDateTimeDesc(Account account);
+
+	List<Party> findAllByMembersContainingAndClosedOrderByPublishedDateTimeDesc(Account account,
+			boolean b);
 
 }

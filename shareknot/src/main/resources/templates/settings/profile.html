@@ -6,75 +6,71 @@
 	<div th:replace="fragment.html::main-navi"></div>
 	<!-- Start -->
 	<div class="container">
-		<div class="row mt-5 justify-content-center">
-			<div class="col-10">
-				<div th:if="${message}" class="alert alert-info alert-dismissible fade show mt-3" role="alert">
-					<span th:text="${message}">success</span>
-					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-						<span aria-hidden="true">x</span>
-					</button>
-				</div>
+		<div th:replace="fragment.html::page-title(title=${account.nickname})"></div>
+		<div th:replace="fragment.html::messageBox"></div>
+		<div class="row justify-content-center">
+			<div class="col-12">
 				<div class="row">
-					<h2 class="col-sm-12" th:text="${account.nickname}">nickname</h2>
-				</div>
-
-				<div class="row mt-3">
-					<div class="col-sm-2">
+					<div class="col-12">
 						<div th:replace="fragment.html::settings-menu(currentMenu='profile')"></div>
 					</div>
-					<form class="col-sm-5" action="#" th:action="@{/settings/profile}" th:object="${profile}" method="post" novalidate>
-						<div class="form-group">
-							<label for="bio">Introduction</label>
-							<input id="bio" type="text" th:field="*{bio}" class="form-control" placeholder="Please write a brief introduction within 35 characters." aria-describedby="bioHelp" required>
-							<small id="bioHelp" class="form-text text-muted"> Please write a brief introduction within 35 characters. </small>
-							<small class="form-text text-danger" th:if="${#fields.hasErrors('bio')}" th:errors="*{bio}"> Too long </small>
-						</div>
-
-						<div class="form-group">
-							<label for="url">Link</label>
-							<input id="url" type="url" th:field="*{url}" class="form-control" placeholder="http://shareknot.com" aria-describedby="urlHelp" required>
-							<small id="urlHelp" class="form-text text-muted"> Add links to your blog, YouTube, or portfolio.</small>
-							<small class="form-text text-danger" th:if="${#fields.hasErrors('url')}" th:errors="*{url}"> This is not a valid URL. Please enter it as an example. </small>
-						</div>
-
-						<div class="form-group">
-							<label for="company">Occupation</label>
-							<input id="company" type="text" th:field="*{occupation}" class="form-control" placeholder="what is your job" aria-describedby="occupationHelp" required>
-							<small id="occupationHelp" class="form-text text-muted"> Developer </small>
-						</div>
-
-						<div class="form-group">
-							<label for="location">Location</label>
-							<input id="location" type="text" th:field="*{location}" class="form-control" placeholder="Toronto" aria-describedby="locationdHelp" required>
-							<small id="locationdHelp" class="form-text text-muted"> Write down the name of the city where you live or work or hang out. </small>
-						</div>
-
-						<div class="form-group">
-							<input id="profileImage" type="hidden" th:field="*{profileImage}" />
-						</div>
-
-						<div class="form-group">
-							<button class="btn btn-primary btn-block" type="submit" aria-describedby="submitHelp">Modify</button>
-						</div>
-					</form>
-					<div class="col-sm-5">
-						<div class="card text-center">
-							<div class="card-header">Profile Image</div>
-							<div id="current-profile-image" class="mt-3">
-								<svg th:if="${#strings.isEmpty(profile.profileImage)}" class="rounded" th:data-jdenticon-value="${account.nickname}" width="125" height="125"></svg>
-								<img th:if="${!#strings.isEmpty(profile.profileImage)}" class="rounded" th:src="${profile.profileImage}" width="125" height="125" alt="name" th:alt="${account.nickname}" />
+				</div>
+				<div class="row">
+					<div class="col-12">
+						<form action="#" th:action="@{/settings/profile}" th:object="${profile}" method="post" novalidate>
+							<div class="form-group">
+								<label for="bio">Introduction</label>
+								<input id="bio" type="text" th:field="*{bio}" class="form-control" placeholder="Please write a brief introduction within 35 characters." aria-describedby="bioHelp" required>
+								<small id="bioHelp" class="form-text text-muted"> Please write a brief introduction within 35 characters. </small>
+								<small class="form-text text-danger" th:if="${#fields.hasErrors('bio')}" th:errors="*{bio}"> Too long </small>
 							</div>
-							<div id="new-profile-image" class="mt-3"></div>
-							<div class="card-body">
-								<div class="custom-file">
-									<input type="file" class="custom-file-input" id="profile-image-file">
-									<label class="custom-file-label" for="profile-image-file">Modify Profile Image</label>
+
+							<div class="form-group">
+								<label for="url">Link</label>
+								<input id="url" type="url" th:field="*{url}" class="form-control" placeholder="http://shareknot.com" aria-describedby="urlHelp" required>
+								<small id="urlHelp" class="form-text text-muted"> Add links to your blog, YouTube, or portfolio.</small>
+								<small class="form-text text-danger" th:if="${#fields.hasErrors('url')}" th:errors="*{url}"> This is not a valid URL. Please enter it as an example. </small>
+							</div>
+
+							<div class="form-group">
+								<label for="company">Occupation</label>
+								<input id="company" type="text" th:field="*{occupation}" class="form-control" placeholder="what is your job" aria-describedby="occupationHelp" required>
+								<small id="occupationHelp" class="form-text text-muted"> Developer </small>
+							</div>
+
+							<div class="form-group">
+								<label for="location">Location</label>
+								<input id="location" type="text" th:field="*{location}" class="form-control" placeholder="Toronto" aria-describedby="locationdHelp" required>
+								<small id="locationdHelp" class="form-text text-muted"> Write down the name of the city where you live or work or hang out. </small>
+							</div>
+
+							<div class="form-group">
+								<input id="profileImage" type="hidden" th:field="*{profileImage}" />
+							</div>
+
+							<div class="form-group">
+								<button class="btn btn-primary btn-block" type="submit" aria-describedby="submitHelp">Modify</button>
+							</div>
+						</form>
+						<div>
+							<div class="card text-center">
+								<div class="card-header">Profile Image</div>
+								<div id="current-profile-image" class="mt-3">
+									<svg th:if="${#strings.isEmpty(profile.profileImage)}" class="rounded" th:data-jdenticon-value="${account.nickname}" width="125" height="125"></svg>
+									<img th:if="${!#strings.isEmpty(profile.profileImage)}" class="rounded" th:src="${profile.profileImage}" width="125" height="125" alt="name" th:alt="${account.nickname}" />
 								</div>
-								<div id="cropped-new-profile-image" class="mt-3"></div>
-								<div id="new-profile-image-control" class="mt-3">
-									<button class="btn btn-outline-primary btn-block" id="cut-button">Crop</button>
-									<button class="btn btn-outline-success btn-block" id="confirm-button">Confirm</button>
-									<button class="btn btn-outline-warning btn-block" id="reset-button">Cancel</button>
+								<div id="new-profile-image" class="mt-3"></div>
+								<div class="card-body">
+									<div class="custom-file">
+										<input type="file" class="custom-file-input" id="profile-image-file">
+										<label class="custom-file-label" for="profile-image-file">Modify Profile Image</label>
+									</div>
+									<div id="cropped-new-profile-image" class="mt-3"></div>
+									<div id="new-profile-image-control" class="mt-3">
+										<button class="btn btn-outline-primary btn-block" id="cut-button">Crop</button>
+										<button class="btn btn-outline-success btn-block" id="confirm-button">Confirm</button>
+										<button class="btn btn-outline-warning btn-block" id="reset-button">Cancel</button>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -91,6 +87,7 @@
 	<script th:replace="fragment.html::form-validation"></script>
 
 	<script type="application/javascript">
+		
 		
 		
 	$(function(){
@@ -178,6 +175,7 @@
                 });
             });
 	});
+	
 	
 	
 	</script>

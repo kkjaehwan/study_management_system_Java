@@ -35,7 +35,7 @@ public class MainController {
 			model.addAttribute("partyList",
 					partyRepository.findByAccount(accountLoaded.getTags(), accountLoaded.getZones()));
 			model.addAttribute("partyManagerOf", partyRepository
-					.findAllByManagersContainingOrderByPublishedDateTimeDesc(account));
+					.findFirst5ByManagersContainingOrderByPublishedDateTimeDesc(account));
 			model.addAttribute("partyMemberOf",
 					partyRepository.findFirst5ByMembersContainingAndClosedOrderByPublishedDateTimeDesc(account, false));
 			return "index-after-login";

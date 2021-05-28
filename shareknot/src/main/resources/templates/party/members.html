@@ -4,11 +4,9 @@
 </head>
 <body class="bg-light">
 	<div th:replace="fragment.html::main-navi"></div>
-	<div th:if="${party.useBanner}" class="row" id="party-logo">
-		<img th:src="${party.image}" />
-	</div>
 	<!-- Sign-up form part Start -->
 	<div class="container">
+		<div th:replace="fragment.html::party-banner"></div>
 		<div th:replace="fragment.html::messageBox"></div>
 		<div th:replace="fragment.html::party-info"></div>
 		<div th:replace="fragment.html::party-menu(partyMenu='members')"></div>

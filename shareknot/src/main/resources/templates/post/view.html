@@ -5,11 +5,9 @@
 <body class="bg-light">
 	<div th:replace="fragment.html::main-navi"></div>
 	<div class="container">
+		<div th:replace="fragment.html::page-title(title=${board.title})"></div>
 		<div class="row text-left justify-content-center">
 			<div class="col-12 pt-3">
-				<div class="text-left mt-3">
-					<h5 th:text="${board.title}"></h5>
-				</div>
 				<div sec:authorize="isAuthenticated()" th:if="${post.isAuthor(#authentication.principal)}" class="nav justify-content-end">
 					<button class="btn btn-danger btn-sm mb-2" data-toggle="modal" data-target="#delete">Delete</button>
 				</div>

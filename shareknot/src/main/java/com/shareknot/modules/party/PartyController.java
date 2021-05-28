@@ -44,8 +44,8 @@ public class PartyController {
 	}
 
 	@PostMapping("/new-party")
-	public String newPartySubmit(@CurrentAccount Account account, @Valid PartyForm partyForm, Errors errors,
-			Model model) {
+	public String newPartySubmit(@CurrentAccount Account account, @Valid PartyForm partyForm,
+			Errors errors, Model model) {
 		if (errors.hasErrors()) {
 			model.addAttribute(account);
 			return "party/form";
@@ -54,8 +54,18 @@ public class PartyController {
 		return "redirect:/party/" + URLEncoder.encode(party.getPath(), StandardCharsets.UTF_8);
 	}
 
+	@GetMapping("/party")
+	public String viewParties(@CurrentAccount Account account, Model model) {
+		model.addAttribute("partyManagerOf",
+				partyRepository.findAllByManagersContainingOrderByPublishedDateTimeDesc(account));
+		model.addAttribute("partyMemberOf", partyRepository
+				.findAllByMembersContainingAndClosedOrderByPublishedDateTimeDesc(account, false));
+		return "account/party-lists";
+	}
+
 	@GetMapping("/party/{path}")
-	public String viewParty(@CurrentAccount Account account, @PathVariable String path, Model model) {
+	public String viewParty(@CurrentAccount Account account, @PathVariable String path,
+			Model model) {
 		Party party = partyService.getParty(path);
 		model.addAttribute(account);
 		model.addAttribute(party);
@@ -63,14 +73,16 @@ public class PartyController {
 	}
 
 	@GetMapping("/party/{path}/members")
-	public String viewPartyMembers(@CurrentAccount Account account, @PathVariable String path, Model model) {
+	public String viewPartyMembers(@CurrentAccount Account account, @PathVariable String path,
+			Model model) {
 		model.addAttribute(account);
 		model.addAttribute(partyRepository.findByPath(path));
 		return "party/members";
 	}
 
 	@PostMapping("/party/{path}/join")
-	public String joinParty(@CurrentAccount Account account, @PathVariable String path, Model model) {
+	public String joinParty(@CurrentAccount Account account, @PathVariable String path,
+			Model model) {
 		Party party = partyRepository.getPartyWithMemberByPath(path);
 		partyService.addMember(party, account);
 
@@ -78,7 +90,8 @@ public class PartyController {
 	}
 
 	@PostMapping("/party/{path}/leave")
-	public String leaveParty(@CurrentAccount Account account, @PathVariable String path, Model model) {
+	public String leaveParty(@CurrentAccount Account account, @PathVariable String path,
+			Model model) {
 		Party party = partyRepository.getPartyWithMemberByPath(path);
 
 		partyService.removeMember(party, account);

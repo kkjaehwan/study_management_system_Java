@@ -5,66 +5,56 @@
 <body class="bg-light">
 	<div th:replace="fragment.html::main-navi"></div>
 	<div class="container">
-		<div class="row mt-5 justify-content-center">
-			<div class="col-2">
+		<div th:replace="fragment.html::page-title(title=Profile)"></div>
+		<div class="row m-2">
+			<div class="col-3">
 				<svg th:if="${#strings.isEmpty(account.profileImage)}" class="img-fluid float-left rounded img-thumbnail" th:data-jdenticon-value="${account.nickname}" width="125" height="125"></svg>
 				<img th:if="${!#strings.isEmpty(account.profileImage)}" class="img-fluid float-left rounded img-thumbnail" th:src="${account.profileImage}" width="125" height="125" />
 			</div>
-			<div class="col-8">
-				<h1 class="display-4 " th:text="${account.nickname}">nickname</h1>
+			<div class="col-9">
+				<h2 th:text="${account.nickname}">nickname</h2>
 				<p class="lead" th:if="${!#strings.isEmpty(account.bio)}" th:text="${account.bio}">introduction</p>
 				<p class="lead" th:if="${#strings.isEmpty(account.bio) && isOwner}">Please write a line introduction.</p>
 			</div>
 		</div>
-		<div class="row mt-3 justify-content-center">
-			<div class="col-2">
+		<div class="row m-2">
+			<div class="col-12">
 				<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
 					<a class="nav-link active" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="true">introduction</a>
-					<a class="nav-link" id="v-pills-group-tab" data-toggle="pill" href="#v-pills-group" role="tab" aria-controls="v-pills-group" aria-selected="false">groups</a>
+					<!-- <a class="nav-link" id="v-pills-group-tab" data-toggle="pill" href="#v-pills-group" role="tab" aria-controls="v-pills-group" aria-selected="false">groups</a> -->
 				</div>
 			</div>
-			<div class="col-8">
+		</div>
+		<div class="row m-2">
+			<div class="col-12">
 				<div class="tab-content" id="v-pills-tabContent">
 					<div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-home-tab">
 						<p th:if="${!#strings.isEmpty(account.url)}">
-							<span style="font-size: 20px;">
-								<i class="fa fa-link col-1"></i>
-							</span>
-							<span th:text="${account.url}" class="col-11"></span>
+							<span style="font-size: 20px;"> <i class="fa fa-link col-1"></i>
+							</span> <span th:text="${account.url}" class="col-11"></span>
 						</p>
 						<p th:if="${!#strings.isEmpty(account.occupation)}">
-							<span style="font-size: 20px;">
-								<i class="fa fa-briefcase col-1"></i>
-							</span>
-							<span th:text="${account.occupation}" class="col-9"></span>
+							<span style="font-size: 20px;"> <i class="fa fa-briefcase col-1"></i>
+							</span> <span th:text="${account.occupation}" class="col-9"></span>
 						</p>
 						<p th:if="${!#strings.isEmpty(account.location)}">
-							<span style="font-size: 20px;">
-								<i class="fa fa-location-arrow col-1"></i>
-							</span>
-							<span th:text="${account.location}" class="col-9"></span>
+							<span style="font-size: 20px;"> <i class="fa fa-location-arrow col-1"></i>
+							</span> <span th:text="${account.location}" class="col-9"></span>
 						</p>
 						<p th:if="${isOwner}">
-							<span style="font-size: 20px;">
-								<i class="fa fa-envelope-o col-1"></i>
-							</span>
-							<span th:text="${account.email}" class="col-9"></span>
+							<span style="font-size: 20px;"> <i class="fa fa-envelope-o col-1"></i>
+							</span> <span th:text="${account.email}" class="col-9"></span>
 						</p>
 						<p th:if="${isOwner}">
-							<span style="font-size: 20px;">
-								<i class="fa fa-calendar-o col-1"></i>
-							</span>
-							<span th:if="${isOwner && !account.emailVerified}" class="col-9">
-								If you want to finish sign-up,
-								<a href="#" th:href="@{/check-email}" class="alert-link">check your email.</a>
-							</span>
-							<span th:if="${account.joinedAt}"class="col-9"> joined date : <span th:text="${#temporals.format(account.joinedAt, 'yyyy/MM/dd')}"></span></span>
+							<span style="font-size: 20px;"> <i class="fa fa-calendar-o col-1"></i>
+							</span> <span th:if="${isOwner && !account.emailVerified}" class="col-9"> If you want to finish sign-up, <a href="#" th:href="@{/check-email}" class="alert-link">check your email.</a>
+							</span> <span th:if="${account.joinedAt}" class="col-9"> joined date : <span th:text="${#temporals.format(account.joinedAt, 'yyyy/MM/dd')}"></span></span>
 						</p>
 						<div th:if="${isOwner}">
 							<a class="btn btn-outline-primary" href="#" th:href="@{/settings/profile}">Modify Profile</a>
 						</div>
 					</div>
-					<div class="tab-pane fade" id="v-pills-group" role="tabpanel" aria-labelledby="v-pills-group-tab">Groups</div>
+					<!-- <div class="tab-pane fade" id="v-pills-group" role="tabpanel" aria-labelledby="v-pills-group-tab">Groups</div> -->
 				</div>
 			</div>
 		</div>

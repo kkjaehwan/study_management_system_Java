@@ -11,24 +11,24 @@ INSERT INTO public.users_roles(user_id,role_id) values(1,1);
 INSERT INTO public.users_roles(user_id,role_id) values(2,2);
 
 INSERT INTO public.party (id,closed,closed_date_time,full_description,image,member_count,"path",published,published_date_time,recruiting,recruiting_updated_date_time,short_description,title,use_banner) VALUES
-	(1 ,false,NULL,'127276',NULL,0,'shareknot'  ,true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party'  ,'shareknot'  ,false),
-	(2 ,false,NULL,'127276',NULL,0,'shareknot2 ',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party2 ','shareknot2 ',false),
-	(3 ,false,NULL,'127276',NULL,0,'shareknot3 ',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party3 ','shareknot3 ',false),
-	(4 ,false,NULL,'127276',NULL,0,'shareknot4 ',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party4 ','shareknot4 ',false),
-	(5 ,false,NULL,'127276',NULL,0,'shareknot5 ',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party5 ','shareknot5 ',false),
-	(6 ,false,NULL,'127276',NULL,0,'shareknot6 ',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party6 ','shareknot6 ',false),
-	(7 ,false,NULL,'127276',NULL,0,'shareknot7 ',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party7 ','shareknot7 ',false),
-	(8 ,false,NULL,'127276',NULL,0,'shareknot8 ',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party8 ','shareknot8 ',false),
-	(9 ,false,NULL,'127276',NULL,0,'shareknot9 ',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party9 ','shareknot9 ',false),
-	(10,false,NULL,'127276',NULL,0,'shareknot10',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party10','shareknot10',false),
-	(11,false,NULL,'127276',NULL,0,'shareknot11',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party11','shareknot11',false),
-	(12,false,NULL,'127276',NULL,0,'shareknot12',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party12','shareknot12',false),
-	(13,false,NULL,'127276',NULL,0,'shareknot13',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party13','shareknot13',false),
-	(14,false,NULL,'127276',NULL,0,'shareknot14',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party14','shareknot14',false),
-	(15,false,NULL,'127276',NULL,0,'shareknot15',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party15','shareknot15',false),
-	(16,false,NULL,'127276',NULL,0,'shareknot16',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party16','shareknot16',false),
-	(17,false,NULL,'127276',NULL,0,'shareknot17',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party17','shareknot17',false),
-	(18,false,NULL,'127276',NULL,0,'shareknot18',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party18','shareknot18',false);;
+	(1 ,false,NULL,'127276','157229',0,'shareknot'  ,true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party'  ,'shareknot'  ,false),
+	(2 ,false,NULL,'127276','157229',0,'shareknot2' ,true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party2 ','shareknot2' ,false),
+	(3 ,false,NULL,'127276','157229',0,'shareknot3' ,true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party3 ','shareknot3' ,false),
+	(4 ,false,NULL,'127276','157229',0,'shareknot4' ,true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party4 ','shareknot4' ,false),
+	(5 ,false,NULL,'127276','157229',0,'shareknot5' ,true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party5 ','shareknot5' ,false),
+	(6 ,false,NULL,'127276','157229',0,'shareknot6' ,true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party6 ','shareknot6' ,false),
+	(7 ,false,NULL,'127276','157229',0,'shareknot7' ,true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party7 ','shareknot7' ,false),
+	(8 ,false,NULL,'127276','157229',0,'shareknot8' ,true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party8 ','shareknot8' ,false),
+	(9 ,false,NULL,'127276','157229',0,'shareknot9' ,true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party9 ','shareknot9' ,false),
+	(10,false,NULL,'127276','157229',0,'shareknot10',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party10','shareknot10',false),
+	(11,false,NULL,'127276','157229',0,'shareknot11',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party11','shareknot11',false),
+	(12,false,NULL,'127276','157229',0,'shareknot12',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party12','shareknot12',false),
+	(13,false,NULL,'127276','157229',0,'shareknot13',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party13','shareknot13',false),
+	(14,false,NULL,'127276','157229',0,'shareknot14',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party14','shareknot14',false),
+	(15,false,NULL,'127276','157229',0,'shareknot15',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party15','shareknot15',false),
+	(16,false,NULL,'127276','157229',0,'shareknot16',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party16','shareknot16',false),
+	(17,false,NULL,'127276','157229',0,'shareknot17',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party17','shareknot17',false),
+	(18,false,NULL,'127276','157229',0,'shareknot18',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party18','shareknot18',false);;
 SELECT setval('party_id_seq', (SELECT MAX(id) FROM party));
 
 INSERT INTO public.party_managers(party_id,managers_id) values
