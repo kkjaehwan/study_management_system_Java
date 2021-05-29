@@ -8,9 +8,11 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
 import com.shareknot.modules.account.Account;
 import com.shareknot.modules.account.UserAccount;
@@ -26,7 +28,8 @@ import lombok.Setter;
 
 public class Comment {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comment_id_generator")
+	@SequenceGenerator(name = "comment_id_generator", sequenceName = "comment_id_seq", allocationSize = 1)
 	private Long id;
 
 	@ManyToOne

@@ -240,12 +240,6 @@ table th {
 </ul>
 <!-- form-validation Start-->
 <script th:fragment="form-validation" type="application/javascript">
-	
-	
-	
-	
-	
-	
     (function () {
         'use strict';
 
@@ -265,25 +259,11 @@ table th {
             })
         }, false)
     }())
-
-
-
-
-
-
-
 </script>
 <!-- form-validation End-->
 <!-- editor-script start-->
 <div th:fragment="editor-script">
 	<script src="/node_modules/summernote/dist/summernote-bs4.min.js"></script> <script type="application/javascript">
-		
-		
-		
-		
-		
-		
-		
         $(function () {
             $('.editor').summernote({
                 fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
@@ -292,13 +272,6 @@ table th {
                 height: 300
             });
         });
-	
-	
-	
-	
-	
-	
-	
 	</script>
 </div>
 <!-- editor-script End-->
@@ -394,11 +367,6 @@ table th {
 <!-- member-list end-->
 <!-- ajax-csrf-header Start-->
 <script th:fragment="ajax-csrf-header" type="application/javascript" th:inline="javascript">
-	
-	
-	
-	
-	
 	$(function() {
         var csrfToken = /*[[${_csrf.token}]]*/ null;
         var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
@@ -406,23 +374,11 @@ table th {
             xhr.setRequestHeader(csrfHeader, csrfToken);
         });
     });
-
-
-
-
-
 </script>
 <!-- ajax-csrf-header end-->
 <!-- update-tags start -->
 <div th:fragment="update-tags (baseUrl)">
 	<script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script> <script type="application/javascript">
-		
-		
-		
-		
-		
-		
-		
 	    $(function() {
 	        function tagRequest(url, tagTitle) {
 	            $.ajax({
@@ -466,20 +422,10 @@ table th {
 	        // re-place Tagify's input element outside of the  element (tagify.DOM.scope), just before it
 	        tagify.DOM.scope.parentNode.insertBefore(tagify.DOM.input, tagify.DOM.scope);
 	    });
-	
-	
-	
-	
-	
-	
-	
 	</script>
 </div>
 <!-- update-tags end-->
 <script th:fragment="ajax-comments(boardTitle, postId, addCommentFormId, loadTagetId)" type="application/javascript">
-	
-	
-	
 	$(document).ready(function() {
 		function commentAddSubmit(){
 			$('.comment-add').off('submit');
@@ -561,11 +507,6 @@ table th {
 		};
 		commentRequest();
 	});
-
-
-
-
-
 </script>
 <div th:fragment="comment-add (commentAddId)">
 	<form sec:authorize="isAuthenticated()" th:id="${commentAddId}" class="col-12 pt-3 needs-validation comment-add" action="#" th:action="@{'/comments/add'}" th:object="${commentForm}" method="post" novalidate>
@@ -577,7 +518,8 @@ table th {
 	</form>
 </div>
 <div th:fragment="comments-list">
-	<script th:replace="fragment.html::date-time"></script> <script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
+	<script th:replace="fragment.html::date-time"></script> 
+	<script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
 	<div th:each="ls: ${commentList}">
 		<div th:classappend="${ls.commentOdr>0}?ml-3">
 			<div>
@@ -619,11 +561,6 @@ table th {
 <!-- update-zones start -->
 <div th:fragment="update-zones (baseUrl)">
 	<script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script> <script type="application/javascript">
-		
-		
-		
-		
-		
     $(function() {
         function zoneRequest(url, zoneName) {
             $.ajax({
@@ -666,33 +603,14 @@ table th {
         // re-place Tagify's input element outside of the  element (tagify.DOM.scope), just before it
         tagify.DOM.scope.parentNode.insertBefore(tagify.DOM.input, tagify.DOM.scope);
     });
-	
-	
-	
-	
-	
 	</script>
 </div>
 <!-- update-zones end -->
 <!-- tooltip Start-->
 <script th:fragment="tooltip" type="application/javascript">
-	
-	
-	
-	
-	
-	
-	
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     })
-
-
-
-
-
-
-
 </script>
 <!-- tooltip End-->
 
@@ -726,13 +644,6 @@ table th {
 
 <div th:fragment="date-time">
 	<script src="/node_modules/moment/min/moment-with-locales.min.js"></script> <script type="application/javascript">
-		
-		
-		
-		
-		
-		
-		
         $(function () {
             //moment.locale('ko');
             $(".date-time").text(function(index, dateTime) {
@@ -757,12 +668,5 @@ table th {
                 return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('LLLL');
             });
         })
-	
-	
-	
-	
-	
-	
-	
 	</script>
 </div>

@@ -4,11 +4,13 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedSubgraph;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 
@@ -32,7 +34,8 @@ import lombok.Setter;
 public class Enrolment {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "enrolment_id_generator")
+	@SequenceGenerator(name = "enrolment_id_generator", sequenceName = "enrolment_id_seq", allocationSize = 1)
 	private Long id;
 
 	@ManyToOne

@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -17,6 +18,7 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.SequenceGenerator;
 
 import com.shareknot.modules.account.Account;
 import com.shareknot.modules.account.UserAccount;
@@ -33,8 +35,9 @@ import lombok.Setter;
 @Entity
 public class Event {
 
-	@Id
-	@GeneratedValue
+	@Id 
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "event_id_generator")
+	@SequenceGenerator(name = "event_id_generator", sequenceName = "event_id_seq", allocationSize = 1)
 	private Long id;
 
 	@ManyToOne
