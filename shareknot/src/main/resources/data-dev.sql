@@ -6,7 +6,7 @@ SELECT setval('accountrole_id_seq', (SELECT MAX(id) FROM public.account_role));
 INSERT INTO public.account (id,bio,email,email_check_token,email_check_token_generate_at,email_login_token,email_login_token_generate_at,email_verified,joined_at,"location",nickname,occupation,party_created_by_email,party_created_by_web,party_enrolment_result_by_email,party_enrolment_result_by_web,party_updated_by_email,party_updated_by_web,"password",profile_image,url) VALUES
 	 (2,NULL,'kkjaehwan@gmail.com','98d4e886-a924-4074-b238-231e55c97da2','2021-05-19 17:59:41.271297',NULL,NULL,false,NULL,NULL,'kkjaehwan',NULL,false,true,false,true,false,true,'{bcrypt}$2a$10$RsuLR4pg0/pXqcxqPLdBPOqVMs8eFllvv9dwYRNYdS8dggnRJCusq',NULL,NULL),
 	 (3,NULL,'kjaehwan89@gmail.com','98d4e886-a924-4074-b238-231e55c97da2','2021-05-19 17:59:41.271297',NULL,NULL,false,NULL,NULL,'kjaehwan89',NULL,false,true,false,true,false,true,'{bcrypt}$2a$10$RsuLR4pg0/pXqcxqPLdBPOqVMs8eFllvv9dwYRNYdS8dggnRJCusq',NULL,NULL),
-	 (1,'','shareknot@gmail.com','98d4e886-a924-4074-b238-231e55c97da2','2021-05-19 17:59:41.271297',NULL,NULL,false,NULL,'','shareknot','',false,true,false,true,false,true,'{bcrypt}$2a$10$RsuLR4pg0/pXqcxqPLdBPOqVMs8eFllvv9dwYRNYdS8dggnRJCusq',NULL,'');
+	 (1,NULL,'shareknot@gmail.com','98d4e886-a924-4074-b238-231e55c97da2','2021-05-19 17:59:41.271297',NULL,NULL,false,NULL,NULL,'shareknot',NULL,false,true,false,true,false,true,'{bcrypt}$2a$10$RsuLR4pg0/pXqcxqPLdBPOqVMs8eFllvv9dwYRNYdS8dggnRJCusq',NULL,'');
 SELECT setval('account_id_seq', (SELECT MAX(id) FROM account));
 	 	 
 INSERT INTO public.users_roles(user_id,role_id) values(1,1);
@@ -599,6 +599,7 @@ INSERT INTO public.account_zones (account_id,zones_id) VALUES
 	 (1,226);
 	 
 INSERT INTO public.party (id,closed,closed_date_time,full_description,image,member_count,"path",published,published_date_time,recruiting,recruiting_updated_date_time,short_description,title,use_banner) VALUES
+	 (1,false,NULL,NULL,NULL,1,'ShareKnot',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party','ShareKnot',true)
 	 (2,false,NULL,NULL,NULL,0,'Toronto',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party','Toronto',false),
 	 (3,false,NULL,NULL,NULL,0,'Canada',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party','Canada',true),
 	 (4,false,NULL,NULL,NULL,0,'Korea',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party','Korea',false),
@@ -608,9 +609,7 @@ INSERT INTO public.party (id,closed,closed_date_time,full_description,image,memb
 	 (8,false,NULL,NULL,NULL,0,'Music',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party','Music',false),
 	 (9,false,NULL,NULL,NULL,0,'Pizza',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party','Pizza',true),
 	 (10,false,NULL,NULL,NULL,0,'Cat',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party','Cat',false),
-	 (1,false,NULL,NULL,NULL,1,'ShareKnot',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party','ShareKnot',true);
-INSERT INTO public.party (id,closed,closed_date_time,full_description,image,member_count,"path",published,published_date_time,recruiting,recruiting_updated_date_time,short_description,title,use_banner) VALUES
-	 (11,false,NULL,'161635',NULL,0,'kkjaehwan',true,'2021-05-28 23:29:22.038717',true,'2021-05-28 23:29:24.048701','kkjaehwan''s party','kkjaehwan',false);
+	 (11,false,NULL,NULL,NULL,0,'kkjaehwan',true,'2021-05-28 23:29:22.038717',true,'2021-05-28 23:29:24.048701','kkjaehwan''s party','kkjaehwan',false);
 SELECT setval('party_id_seq', (SELECT MAX(id) FROM party));
 
 INSERT INTO public.party_managers (party_id,managers_id) VALUES
@@ -682,10 +681,10 @@ SELECT setval('comment_id_seq', (SELECT MAX(id) FROM comment));
 
 
 INSERT INTO public."event" (id,created_date_time,description,end_date_time,end_enrolment_date_time,event_type,limit_of_enrolments,start_date_time,title,created_by_id,party_id) VALUES
-	 (1,'2021-05-28 23:24:28.196454','161627','2021-05-31 23:24:00','2021-05-29 23:24:00','FCFS',2,'2021-05-30 23:24:00','shareknot test meeting',1,1),
-	 (2,'2021-05-28 23:25:05.75091','161628','2021-07-07 23:25:00','2021-06-29 23:24:00','FCFS',2,'2021-07-01 23:24:00','shareknot future test meeting',1,1),
-	 (3,'2021-05-28 23:26:09.622647','161630','2021-06-01 23:26:00','2021-05-29 23:26:00','CONFIRMATIVE',2,'2021-05-30 23:26:00','kkjaehwan''s party meeting',2,11),
-	 (4,'2021-05-28 23:28:56.757479','161633','2021-06-05 23:28:00','2021-05-29 23:28:00','CONFIRMATIVE',2,'2021-06-01 23:28:00','test meeting',1,1);
+	 (1,'2021-05-28 23:24:28.196454',NULL,'2021-05-31 23:24:00','2021-05-29 23:24:00','FCFS',2,'2021-05-30 23:24:00','shareknot test meeting',1,1),
+	 (2,'2021-05-28 23:25:05.75091',NULL,'2021-07-07 23:25:00','2021-06-29 23:24:00','FCFS',2,'2021-07-01 23:24:00','shareknot future test meeting',1,1),
+	 (3,'2021-05-28 23:26:09.622647',NULL,'2021-06-01 23:26:00','2021-05-29 23:26:00','CONFIRMATIVE',2,'2021-05-30 23:26:00','kkjaehwan''s party meeting',2,11),
+	 (4,'2021-05-28 23:28:56.757479',NULL,'2021-06-05 23:28:00','2021-05-29 23:28:00','CONFIRMATIVE',2,'2021-06-01 23:28:00','test meeting',1,1);
 SELECT setval('event_id_seq', (SELECT MAX(id) FROM event));
 	 
 
