@@ -608,8 +608,7 @@ INSERT INTO public.party (id,closed,closed_date_time,full_description,image,memb
 	 (7,false,NULL,NULL,NULL,0,'Java',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party','Java',true),
 	 (8,false,NULL,NULL,NULL,0,'Music',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party','Music',false),
 	 (9,false,NULL,NULL,NULL,0,'Pizza',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party','Pizza',true),
-	 (10,false,NULL,NULL,NULL,0,'Cat',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party','Cat',false),
-	 (11,false,NULL,NULL,NULL,0,'kkjaehwan',true,'2021-05-28 23:29:22.038717',true,'2021-05-28 23:29:24.048701','kkjaehwan''s party','kkjaehwan',false);
+	 (10,false,NULL,NULL,NULL,0,'Cat',true,'2021-05-26 17:19:24.117325',true,'2021-05-26 17:18:59.56765','Shareknot Default Party','Cat',false);
 SELECT setval('party_id_seq', (SELECT MAX(id) FROM party));
 
 INSERT INTO public.party_managers (party_id,managers_id) VALUES
