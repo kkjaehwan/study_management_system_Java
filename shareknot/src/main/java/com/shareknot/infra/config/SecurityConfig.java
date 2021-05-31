@@ -29,7 +29,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 				.mvcMatchers("/", "/login", "/login-by-email", "/sign-up", "/check-email-token",
 						"/email-login", "/check-email-login", "/login-link", "/ownner-profile",
-						"/search", "/board/lists", "/board/lists/*/posts/*", "/board/lists/*/posts", "/comments/get-comments/*")
+						"/search", "/board/lists", "/board/lists/*/posts/*", "/board/lists/*/posts",
+						"/comments/get-comments/*")
 				.permitAll()
 				.mvcMatchers(HttpMethod.GET, "/profile/*")
 				.permitAll()
@@ -39,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        http.csrf().disable();
 //        http.csrf().ignoringAntMatchers("/h2-console/**");
 //        http.headers().frameOptions().disable();
-        
+
 		http.formLogin()
 				.loginPage("/login")
 				.permitAll();
@@ -66,7 +67,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		web.ignoring()
 				.mvcMatchers("/node_modules/**")
 				.requestMatchers(PathRequest.toStaticResources()
-						.atCommonLocations());
+						.atCommonLocations())
+				.antMatchers("/error");
 	}
 
 }

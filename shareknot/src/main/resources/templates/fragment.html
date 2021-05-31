@@ -220,7 +220,7 @@ table th {
 					</p>
 					<div class="d-flex justify-content-between align-items-center">
 						<small class="text-muted">
-							<i class="fa fa-user-circle"></i> <span th:text="${party.memberCount}"></span>명
+							<i class="fa fa-user-circle"></i> <span th:text="${party.memberCount}"></span>
 						</small>
 						<small class="text-muted date" th:text="${party.publishedDateTime}">9 mins</small>
 					</div>
@@ -294,7 +294,7 @@ table th {
 
 				<a th:href="@{'/party/' + ${party.path} + '/members'}">
 					<small class="font-weight-light text-monospace badge badge-primary">
-						<i class="fa fa-user-circle"></i> <span th:text="${party.memberCount+'명'}"></span>
+						<i class="fa fa-user-circle"></i> <span th:text="${party.memberCount}"></span>
 					</small>
 				</a>
 			</div>
@@ -531,7 +531,9 @@ table th {
 						<img th:if="${!#strings.isEmpty(ls.getAuthor?.profileImage)}" th:src="${ls.getAuthor().profileImage}" width="25" height="25" class="rounded border mr-3" />
 					</small>
 					<small class="flex-grow-1">
-						<h5 th:text="${ls.getAuthor().getNickname()}"></h5>
+						<a th:href="@{'/profile/' + ${ls.getAuthor().getNickname()}}" class="text-decoration-none">
+							<h5 th:text="${ls.getAuthor().getNickname()}"></h5>
+						</a>
 					</small>
 					<small class="calendar" th:text="${ls.getCreatedDateTime}">9 mins</small>
 					<i sec:authorize="isAuthenticated()" th:if="${ls.isAuthor(#authentication.principal)}" class="comment-remove ml-1 fa fa-window-close" aria-hidden="true" th:no="${ls.id}"></i>
