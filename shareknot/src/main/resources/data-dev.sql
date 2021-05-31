@@ -667,7 +667,7 @@ INSERT INTO post (id,"content",created_date_time,title,view_count,comment_count,
 	 (20,NULL,'2021-05-02 23:34:05.92853','Magic Hour',0,0,1,1),
 	 (21,NULL,'2021-05-03 23:34:05.92853','Private Player',0,0,1,1),
 	 (22,NULL,'2021-05-04 23:34:05.92853','He Who Fights with Monsters 2',0,0,1,1),
-	 (23,NULL,'2021-05-05 23:34:05.92853','Where the Crawdads Sing',0,0,1,1);
+	 (23,NULL,'2021-05-05 23:34:05.92853','Where the Crawdads Sing',0,4,1,1);
 SELECT setval('post_id_seq', (SELECT MAX(id) FROM post));
 
 
