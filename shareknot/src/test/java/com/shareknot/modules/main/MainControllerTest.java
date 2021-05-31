@@ -7,15 +7,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.shareknot.infra.AbstractContainerBase;
 import com.shareknot.infra.MockMvcTest;
+import com.shareknot.infra.TestDBInit;
+import com.shareknot.infra.TestDBSetting;
 import com.shareknot.modules.account.AccountRepository;
 import com.shareknot.modules.account.AccountService;
 import com.shareknot.modules.account.form.SignUpForm;
@@ -24,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @MockMvcTest
 @Slf4j
-class MainControllerTest extends AbstractContainerBase {
+class MainControllerTest {
 
 	@Autowired
 	MockMvc mockMvc;
@@ -35,6 +38,14 @@ class MainControllerTest extends AbstractContainerBase {
 	@Autowired
 	AccountRepository accountRepository;
 
+	@Autowired
+	TestDBSetting testDBSetting;
+	
+	@BeforeEach
+	void initDB() {
+		testDBSetting.init();
+	}
+
 	@BeforeEach
 	void beforeEach() {
 		SignUpForm signUpForm = new SignUpForm();
@@ -42,7 +53,7 @@ class MainControllerTest extends AbstractContainerBase {
 		signUpForm.setNickname("test");
 		signUpForm.setPassword("12345678");
 		accountService.processNewAccount(signUpForm);
-		
+
 	}
 
 	@AfterEach

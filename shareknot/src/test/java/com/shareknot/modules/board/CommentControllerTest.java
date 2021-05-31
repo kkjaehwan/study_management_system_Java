@@ -17,8 +17,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shareknot.infra.AbstractContainerBase;
 import com.shareknot.infra.MockMvcTest;
+import com.shareknot.infra.TestDBInit;
+import com.shareknot.infra.TestDBSetting;
 import com.shareknot.modules.account.Account;
 import com.shareknot.modules.account.AccountRepository;
 import com.shareknot.modules.account.AccountService;
@@ -29,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @MockMvcTest
 @Slf4j
-class CommentControllerTest extends AbstractContainerBase {
+class CommentControllerTes {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -69,6 +70,14 @@ class CommentControllerTest extends AbstractContainerBase {
 
 	private Board board;
 	private Post post;
+
+	@Autowired
+	TestDBSetting testDBSetting;
+
+	@BeforeEach
+	void initDB() {
+		testDBSetting.init();
+	}
 
 	@BeforeEach
 	void makeFreeboard() {
@@ -163,7 +172,7 @@ class CommentControllerTest extends AbstractContainerBase {
 		int before_size = post.getComments()
 				.size();
 		String url = "/comments/remove/" + saveComment.getId();
-		
+
 		removeComment(url);
 
 		printComments(post);
@@ -183,29 +192,37 @@ class CommentControllerTest extends AbstractContainerBase {
 		Account account = withBoardPostFactoryImpl.getPrincipalAccount()
 				.getAccount();
 
-		fstCommentForm=createCommentForm("=============1=============",board.getTitle(),post.getId(),null);
+		fstCommentForm = createCommentForm("=============1=============", board.getTitle(),
+				post.getId(), null);
 		commentService.saveComment(board, post, account, fstCommentForm);
 
-		fstCommentForm=createCommentForm("=============2=============",board.getTitle(),post.getId(),null);
+		fstCommentForm = createCommentForm("=============2=============", board.getTitle(),
+				post.getId(), null);
 		Comment saveComment = commentService.saveComment(board, post, account, fstCommentForm);
-		
-		fstCommentForm=createCommentForm("=============3=============",board.getTitle(),post.getId(),null);
+
+		fstCommentForm = createCommentForm("=============3=============", board.getTitle(),
+				post.getId(), null);
 		commentService.saveComment(board, post, account, fstCommentForm);
-		
-		fstCommentForm=createCommentForm("=============4=============",board.getTitle(),post.getId(),null);
+
+		fstCommentForm = createCommentForm("=============4=============", board.getTitle(),
+				post.getId(), null);
 		commentService.saveComment(board, post, account, fstCommentForm);
 
 		Long parentId = saveComment.getId();
-		sndCommentForm=createCommentForm("=============2-1=============",board.getTitle(),post.getId(),parentId);
+		sndCommentForm = createCommentForm("=============2-1=============", board.getTitle(),
+				post.getId(), parentId);
 		commentService.saveComment(board, post, account, sndCommentForm);
-		
-		sndCommentForm=createCommentForm("=============2-2=============",board.getTitle(),post.getId(),parentId);
+
+		sndCommentForm = createCommentForm("=============2-2=============", board.getTitle(),
+				post.getId(), parentId);
 		Comment subComment = commentService.saveComment(board, post, account, sndCommentForm);
-		
-		sndCommentForm=createCommentForm("=============2-3=============",board.getTitle(),post.getId(),parentId);
+
+		sndCommentForm = createCommentForm("=============2-3=============", board.getTitle(),
+				post.getId(), parentId);
 		commentService.saveComment(board, post, account, sndCommentForm);
-		
-		fstCommentForm=createCommentForm("=============5=============",board.getTitle(),post.getId(),null);
+
+		fstCommentForm = createCommentForm("=============5=============", board.getTitle(),
+				post.getId(), null);
 		commentService.saveComment(board, post, account, fstCommentForm);
 
 		printComments(post);
@@ -233,13 +250,13 @@ class CommentControllerTest extends AbstractContainerBase {
 		assertTrue(after_size < before_size);
 	}
 
-	private CommentForm createCommentForm(String string, String title, Long id,Long parentId) {
+	private CommentForm createCommentForm(String string, String title, Long id, Long parentId) {
 		CommentForm commentForm = new CommentForm();
 		commentForm.setContent(string);
 		commentForm.setBoardTitle(title);
 		commentForm.setPostId(id);
 		commentForm.setParentCommentId(parentId);
-		
+
 		return commentForm;
 	}
 

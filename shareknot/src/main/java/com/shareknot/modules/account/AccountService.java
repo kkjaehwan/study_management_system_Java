@@ -56,13 +56,13 @@ public class AccountService implements UserDetailsService {
 		return newAccount;
 	}
 
-	private Account saveNewAccount(SignUpForm signUpForm) {
+	public Account saveNewAccount(SignUpForm signUpForm) {
 		signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
 
 		Account account = modelMapper.map(signUpForm, Account.class);
 
 		AccountRole userRole = accountRoleRepository.findByName("ROLE_USER");
-		account.setRoles(Stream.of(userRole).collect(Collectors.toSet()));
+		account.addRole(userRole);
 
 //		Account account = Account.builder()
 //				.email(signUpForm.getEmail())

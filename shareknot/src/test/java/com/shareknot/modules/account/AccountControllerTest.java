@@ -15,15 +15,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.shareknot.infra.AbstractContainerBase;
-import com.shareknot.infra.TestContainerBasePostgres;
 import com.shareknot.infra.MockMvcTest;
+import com.shareknot.infra.TestDBInit;
+import com.shareknot.infra.TestDBSetting;
 import com.shareknot.infra.email.EmailMessage;
 import com.shareknot.infra.email.EmailService;
 import com.shareknot.modules.account.form.SignUpForm;
@@ -32,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @MockMvcTest
 @Slf4j
-class AccountControllerTest extends AbstractContainerBase {
+class AccountControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -59,6 +60,7 @@ class AccountControllerTest extends AbstractContainerBase {
 	}
 
 	@DisplayName("check confirmation email - correct")
+	@WithAccount("")
 	@Test
 	void checkEmailToken() throws Exception {
 
@@ -105,6 +107,7 @@ class AccountControllerTest extends AbstractContainerBase {
 	}
 
 	@DisplayName("회원가입처리 - 입력 정상")
+	@WithAccount("")
 	@Test
 	void signUpSubmit_with_correct_input() throws Exception {
 		mockMvc.perform(post("/sign-up").param("nickname", "test")

@@ -10,20 +10,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.shareknot.infra.AbstractContainerBase;
 import com.shareknot.infra.MockMvcTest;
+import com.shareknot.infra.TestDBInit;
+import com.shareknot.infra.TestDBSetting;
 import com.shareknot.modules.account.WithAccount;
 
 import lombok.extern.slf4j.Slf4j;
 
 @MockMvcTest
 @Slf4j
-public class BoardControllerTest extends AbstractContainerBase {
+public class BoardControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -31,6 +33,14 @@ public class BoardControllerTest extends AbstractContainerBase {
 	@Autowired
 	BoardRepository boardRepository;
 
+	@Autowired
+	TestDBSetting testDBSetting;
+
+	@BeforeEach
+	void initDB() {
+		testDBSetting.init();
+	}
+	
 	@DisplayName("@GetMapping(\"/new-board\") : view a new board form without authority")
 	@Test
 	void view_new_board_form() throws Exception {

@@ -36,6 +36,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest()
 				.authenticated();
 
+//        http.csrf().disable();
+//        http.csrf().ignoringAntMatchers("/h2-console/**");
+//        http.headers().frameOptions().disable();
+        
 		http.formLogin()
 				.loginPage("/login")
 				.permitAll();

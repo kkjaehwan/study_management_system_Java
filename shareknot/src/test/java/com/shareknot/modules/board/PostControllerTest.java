@@ -24,8 +24,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shareknot.infra.AbstractContainerBase;
 import com.shareknot.infra.MockMvcTest;
+import com.shareknot.infra.TestDBInit;
+import com.shareknot.infra.TestDBSetting;
 import com.shareknot.modules.account.AccountRepository;
 import com.shareknot.modules.account.AccountService;
 import com.shareknot.modules.account.WithAccount;
@@ -34,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @MockMvcTest
 @Slf4j
-class PostControllerTest extends AbstractContainerBase {
+class PostControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -66,6 +67,14 @@ class PostControllerTest extends AbstractContainerBase {
 	@Autowired
 	WithBoardPostFactoryImpl withBoardPostFactoryImpl;
 
+	@Autowired
+	TestDBSetting testDBSetting;
+	
+	@BeforeEach
+	void initDB() {
+		testDBSetting.init();
+	}
+	
 	@BeforeEach
 	void makeFreeboard() {
 		withBoardPostFactoryImpl.makeBoard("freeboard");

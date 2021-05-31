@@ -25,6 +25,20 @@
 				},
 				"auth-model": "native"
 			}
+		},
+		"h2_embedded-179c002151f-268c0857bd532f90": {
+			"provider": "generic",
+			"driver": "h2_embedded",
+			"name": "testdb2",
+			"save-password": true,
+			"read-only": false,
+			"configuration": {
+				"database": "mem:testdb2",
+				"url": "jdbc:h2:mem:testdb2",
+				"type": "dev",
+				"auth-model": "native",
+				"handlers": {}
+			}
 		}
 	},
 	"connection-types": {

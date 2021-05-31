@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@ActiveProfiles("test")
+@ActiveProfiles("test_h2")
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc

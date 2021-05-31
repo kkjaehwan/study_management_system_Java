@@ -59,7 +59,7 @@ public class Account {
 
 	@ManyToMany
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-	private Set<AccountRole> roles;
+	private Set<AccountRole> roles = new HashSet<>();
 
 	private boolean emailVerified;
 
@@ -151,6 +151,11 @@ public class Account {
 		if (this.emailLoginToken.isEmpty() || this.emailLoginToken.isBlank())
 			return false;
 		return this.emailLoginToken.equals(token);
+	}
+	
+	public void addRole(AccountRole role) {
+		if(!this.roles.contains(role))
+			this.roles.add(role);
 	}
 
 }

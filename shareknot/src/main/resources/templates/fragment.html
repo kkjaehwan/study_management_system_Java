@@ -425,7 +425,8 @@ table th {
 	</script>
 </div>
 <!-- update-tags end-->
-<script th:fragment="ajax-comments(boardTitle, postId, addCommentFormId, loadTagetId)" type="application/javascript">
+<div th:fragment="ajax-comments(boardTitle, postId, addCommentFormId, loadTagetId)">
+	<script  type="application/javascript">
 	$(document).ready(function() {
 		function commentAddSubmit(){
 			$('.comment-add').off('submit');
@@ -507,7 +508,8 @@ table th {
 		};
 		commentRequest();
 	});
-</script>
+	</script>
+</div>
 <div th:fragment="comment-add (commentAddId)">
 	<form sec:authorize="isAuthenticated()" th:id="${commentAddId}" class="col-12 pt-3 needs-validation comment-add" action="#" th:action="@{'/comments/add'}" th:object="${commentForm}" method="post" novalidate>
 		<div class="form-group">
@@ -538,13 +540,13 @@ table th {
 					<span th:text="${ls.content}"></span>
 				</div>
 			</div>
-			<div>
+			<div sec:authorize="isAuthenticated()">
 				<div class="text-right">
-					<label class="subcomment-add" th:no="${ls.id}"> <i sec:authorize="isAuthenticated()" class="mr-1 fa fa-comments-o" aria-hidden="true"></i>Reply
+					<label class="subcomment-add" th:no="${ls.id}"> <i class="mr-1 fa fa-comments-o" aria-hidden="true"></i>Reply
 					</label>
 				</div>
 				<div class="d-flex">
-					<form sec:authorize="isAuthenticated()" class="col-12 pt-3 needs-validation comment-add" action="#" th:action="@{'/comments/add'}" th:object="${commentForm}" method="post" novalidate th:id="'sub_comment_add'+${ls.id}" style="display: none;">
+					<form class="col-12 pt-3 needs-validation comment-add" action="#" th:action="@{'/comments/add'}" th:object="${commentForm}" method="post" novalidate th:id="'sub_comment_add'+${ls.id}" style="display: none;">
 						<input name="parentCommentId" type="hidden" th:value="${ls.id}" class="form-control">
 						<div class="form-group">
 							<input id="content" name="content" type="text" class="form-control" placeholder="Write a comment." aria-describedby="contentHelp" required minlength="10" maxlength="100">

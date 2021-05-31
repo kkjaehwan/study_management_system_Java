@@ -1,6 +1,6 @@
 package com.shareknot.modules.account;
 
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -35,9 +35,6 @@ public class AccountRole {
 
 	@Column(unique = true)
 	private String name;
-	
-	@ManyToMany(mappedBy = "roles")
-	private Set<Account> accounts;
 
 	@ManyToMany
 	@JoinTable(name = "roles_privileges", joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
